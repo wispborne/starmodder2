@@ -1,3 +1,4 @@
+import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,24 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Starmodder',
-      theme: ThemeData.dark(useMaterial3: false).copyWith(primaryColor: Colors.cyan),
-      routerConfig: _router,
-    );
+    return AdaptiveTheme(
+        light: ThemeData(
+          brightness: Brightness.light,
+          primarySwatch: Colors.cyan,
+          accentColor: Colors.cyanAccent,
+        ),
+        dark: ThemeData(
+          brightness: Brightness.dark,
+          primarySwatch: Colors.cyan,
+          accentColor: Colors.cyanAccent,
+        ),
+        initial: AdaptiveThemeMode.dark,
+        builder: (theme, darkTheme) => MaterialApp.router(
+              title: 'Starmodder',
+              theme: theme,
+              darkTheme: darkTheme,
+              routerConfig: _router,
+            ));
   }
 
   final GoRouter _router = GoRouter(
@@ -71,10 +85,23 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextField(
-            decoration: InputDecoration(
-                hintText: widget.title)),
-      ),
+          title: Row(
+        children: [
+          Expanded(child: Text(widget.title)),
+          SizedBox(
+              width: 500,
+              child: TextField(
+                  autofocus: true,
+                  onChanged: (text) => ref
+                      .read(appState.search.notifier)
+                      .update((state) => text),
+                  decoration: const InputDecoration(
+                      hintText: "Search",
+                      icon: Icon(Icons.search),
+                      isDense: true))),
+          Spacer()
+        ],
+      )),
       body: Center(
         child: Padding(
             padding: const EdgeInsets.all(10),

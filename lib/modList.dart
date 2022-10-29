@@ -5,7 +5,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hovering/hovering.dart';
 import 'package:intl/intl.dart';
+import 'package:starmodder2/search.dart';
 import 'package:starmodder2/state.dart' as state;
+import 'package:text_search/text_search.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,8 +27,15 @@ class _ModListState extends ConsumerState<ModList> {
   Widget build(BuildContext context) {
     final modRepo = ref.watch(state.allMods);
     final query = ref.watch(state.search);
-    final mods = modRepo?.items.filter((element) =>
-    query == null || element.name?.containsIgnoreCase(query) == true);
+    final mods = (query == null || modRepo == null)
+        ? modRepo?.items
+        : TextSearch(modRepo.items
+                .map((element) =>
+                    TextSearchItem(element, createSearchTags(element)))
+                .toList())
+            .search(query)
+            .map((e) => e.object)
+            .toList();
     final locale = ref.watch(state.locale);
 
     final theme = Theme.of(context);
@@ -35,6 +44,7 @@ class _ModListState extends ConsumerState<ModList> {
         theme.textTheme.labelLarge?.copyWith(color: subtextColor);
     var titleStyle = theme.textTheme.headlineSmall;
     const buttonStyle = ButtonStyle(
+        foregroundColor: MaterialStatePropertyAll(Colors.white),
         textStyle: MaterialStatePropertyAll(TextStyle(fontSize: 13)),
         backgroundColor: MaterialStatePropertyAll(Colors.black26));
     const imageWidth = 380.0;
@@ -108,11 +118,14 @@ class _ModListState extends ConsumerState<ModList> {
                           Icons.tag,
                           color: subtextColor,
                         ),
-                        Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Text(mod.categories?.join(", ") ?? "",
-                                overflow: TextOverflow.ellipsis,
-                                style: subTextStyle))
+                        Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: Tooltip(
+                                    message: mod.categories!.join(", "),
+                                    child: Text(mod.categories!.join(", "),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: subTextStyle))))
                       ],
                     )
                 ];

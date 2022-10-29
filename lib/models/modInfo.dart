@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'modImage.dart';
 
-
 part '../generated/models/modInfo.freezed.dart';
 
 part '../generated/models/modInfo.g.dart';
