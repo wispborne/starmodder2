@@ -57,6 +57,7 @@ class _ModListState extends ConsumerState<ModList> {
           ? const Text("Fetching...")
           : GridView.builder(
               padding: const EdgeInsets.all(0),
+              shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: cellWidth,
                   mainAxisExtent: cellHeight,
@@ -119,10 +120,10 @@ class _ModListState extends ConsumerState<ModList> {
                           color: subtextColor,
                         ),
                         Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Tooltip(
-                                    message: mod.categories!.join(", "),
+                            child: Tooltip(
+                                message: mod.categories!.join(", "),
+                                child: Padding(
+                                    padding: const EdgeInsets.only(left: 10),
                                     child: Text(mod.categories!.join(", "),
                                         overflow: TextOverflow.ellipsis,
                                         style: subTextStyle))))
@@ -212,22 +213,26 @@ class _ModListState extends ConsumerState<ModList> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                      width: cellWidth / 3,
-                                      child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ...infoWidgets.filter((i) =>
-                                                infoWidgets.indexOf(i).isEven)
-                                          ])),
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        ...infoWidgets.filter(
-                                            (i) => infoWidgets.indexOf(i).isOdd)
-                                      ])
+                                  if (infoWidgets.isNotEmpty)
+                                    SizedBox(
+                                        width: cellWidth / 3,
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ...infoWidgets.filter((i) =>
+                                                  infoWidgets.indexOf(i).isEven)
+                                            ])),
+                                  if (infoWidgets.isNotEmpty)
+                                    SizedBox(
+                                        width: cellWidth / 3,
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ...infoWidgets.filter((i) =>
+                                                  infoWidgets.indexOf(i).isOdd)
+                                            ]))
                                 ]),
                             const Divider(),
                             if (mod.summary != null)

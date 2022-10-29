@@ -1,4 +1,3 @@
-import 'package:fimber/fimber.dart';
 import 'package:starmodder2/models/modInfo.dart';
 import 'package:stringr/stringr.dart';
 

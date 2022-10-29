@@ -8,12 +8,16 @@ import 'package:platform_info/platform_info.dart';
 import 'package:starmodder2/logging.dart';
 import 'package:starmodder2/modList.dart';
 import 'package:starmodder2/state.dart' as appState;
+import 'package:window_size/window_size.dart';
 
 import 'business.dart';
 import 'models/modRepo.dart';
 
+final appTitle = "Starmodder 2.0";
+
 void main() {
   initLogging(printPlatformInfo: true);
+  setWindowTitle(appTitle);
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -52,8 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(
-              title: 'Starmodder 2', query: state.queryParams["q"]);
+          return MyHomePage(title: appTitle, query: state.queryParams["q"]);
         },
       )
     ],
@@ -83,6 +86,7 @@ class MyHomePage extends ConsumerStatefulWidget {
 class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -92,12 +96,26 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               width: 500,
               child: TextField(
                   autofocus: true,
+                  controller: controller,
                   onChanged: (text) => ref
                       .read(appState.search.notifier)
                       .update((state) => text),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       hintText: "Search",
-                      icon: Icon(Icons.search),
+                      icon: const Icon(Icons.search),
+                      suffix: InkWell(
+                          onTap: () {
+                            controller.clear();
+                            ref
+                                .read(appState.search.notifier)
+                                .update((state) => null);
+                          },
+                          child: const SizedBox(
+                              height: 16,
+                              child: Icon(
+                                Icons.clear,
+                                size: 16.0,
+                              ))),
                       isDense: true))),
           Spacer()
         ],
