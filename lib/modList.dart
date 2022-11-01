@@ -30,8 +30,7 @@ class _ModListState extends ConsumerState<ModList> {
     final mods = (query == null || modRepo == null)
         ? modRepo?.items
         : TextSearch(modRepo.items
-                .map((element) =>
-                    TextSearchItem(element, createSearchTags(element)))
+                .map((element) => TextSearchItem(element, createSearchTags(element)))
                 .toList())
             .search(query)
             .map((e) => e.object)
@@ -40,8 +39,7 @@ class _ModListState extends ConsumerState<ModList> {
 
     final theme = Theme.of(context);
     final subtextColor = theme.textTheme.labelLarge?.color?.withAlpha(170);
-    final subTextStyle =
-        theme.textTheme.labelLarge?.copyWith(color: subtextColor);
+    final subTextStyle = theme.textTheme.labelLarge?.copyWith(color: subtextColor);
     var titleStyle = theme.textTheme.headlineSmall;
     const buttonStyle = ButtonStyle(
         foregroundColor: MaterialStatePropertyAll(Colors.white),
@@ -64,8 +62,8 @@ class _ModListState extends ConsumerState<ModList> {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10),
               itemCount: mods.length,
-              itemBuilder: (context, index) {
-                final mod = mods[index];
+              itemBuilder: (context, indexOfMod) {
+                final mod = mods[indexOfMod];
                 final infoWidgets = [
                   if (mod.authorsList.isNotNullOrEmpty())
                     Row(
@@ -91,8 +89,7 @@ class _ModListState extends ConsumerState<ModList> {
                         Icon(Icons.videogame_asset, color: subtextColor),
                         Padding(
                             padding: const EdgeInsets.only(left: 10),
-                            child: Text(mod.gameVersionReq ?? "",
-                                style: subTextStyle))
+                            child: Text(mod.gameVersionReq ?? "", style: subTextStyle))
                       ],
                     ),
                   if (mod.dateTimeCreated.isNotNullOrEmpty())
@@ -106,8 +103,8 @@ class _ModListState extends ConsumerState<ModList> {
                         Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                                DateFormat.yMd(locale).format(
-                                    DateTime.parse(mod.dateTimeCreated ?? "")),
+                                DateFormat.yMd(locale)
+                                    .format(DateTime.parse(mod.dateTimeCreated ?? "")),
                                 style: subTextStyle))
                       ],
                     ),
@@ -125,11 +122,11 @@ class _ModListState extends ConsumerState<ModList> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(left: 10),
                                     child: Text(mod.categories!.join(", "),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: subTextStyle))))
+                                        overflow: TextOverflow.ellipsis, style: subTextStyle))))
                       ],
                     )
                 ];
+                var images = mod.images?.values.toList(growable: false) ?? [];
 
                 return Card(
                     elevation: 5,
@@ -142,9 +139,79 @@ class _ModListState extends ConsumerState<ModList> {
                             if (mod.images?.values.isNotEmpty == true)
                               GestureDetector(
                                   onTap: () {
-                                    _showMyDialog(context, body: [
-                                      Image.network(
-                                          mod.images?.values.first.url ?? "")
+                                    final size = MediaQuery.of(context).size;
+                                    _showMyDialog(context, maxWidth: size.width, body: [
+                                      SizedBox(
+                                          width: size.width,
+                                          height: size.height - 100,
+                                          child: DefaultTabController(
+                                              length: images.length,
+                                              child: Scaffold(
+                                                appBar: AppBar(
+                                                    bottom: TabBar(
+                                                  tabs: [
+                                                    ...images
+                                                        .map((img) => Tab(text: img.filename))
+                                                        .toList(growable: false)
+                                                  ],
+                                                )),
+                                                body: TabBarView(
+                                                    physics: PageScrollPhysics(),
+                                                    children: [
+                                                      ...images
+                                                          .map((img) => Stack(
+                                                                  alignment: Alignment.center,
+                                                                  children: [
+                                                                    Image.network(img.url ?? ""),
+                                                                    Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          height: 100,
+                                                                          width: double.infinity,
+                                                                          color: Colors.black54
+                                                                              .withOpacity(1.0),
+                                                                        ),
+                                                                        Container(
+                                                                          height: 100,
+                                                                          color: Colors.black54
+                                                                              .withOpacity(1.0),
+                                                                        ),
+                                                                      ],
+                                                                    )
+                                                                  ]))
+                                                          .toList(growable: false)
+                                                    ]),
+                                              ))
+                                          // ZoomablePhotoGallery(
+                                          //     imageList: List.generate(
+                                          //   images.length,
+                                          //   (index) => Image.network(
+                                          //       images[index].url ?? ""),
+                                          // ),
+                                          //   height: size.height - 150,
+                                          // )
+                                          )
+                                      // SizedBox(
+                                      //     width: size.width,
+                                      //     height: size.height,
+                                      //     child: PhotoViewGallery.builder(
+                                      //       itemCount: images.length,
+                                      //       builder: (BuildContext context,
+                                      //               int index) =>
+                                      //           PhotoViewGalleryPageOptions(
+                                      //         imageProvider: NetworkImage(
+                                      //             images[index].url ?? ""),
+                                      //       ),
+                                      //       loadingBuilder:
+                                      //           (context, event) => Center(
+                                      //         child: Container(
+                                      //           width: 20.0,
+                                      //           height: 20.0,
+                                      //           child:
+                                      //               CircularProgressIndicator(),
+                                      //         ),
+                                      //       ),
+                                      //     ))
                                     ]);
                                   },
                                   child: Stack(children: [
@@ -155,8 +222,7 @@ class _ModListState extends ConsumerState<ModList> {
                                       width: imageWidth,
                                       height: imageHeight,
                                       fit: BoxFit.fitWidth,
-                                      fadeInDuration:
-                                          const Duration(milliseconds: 100),
+                                      fadeInDuration: const Duration(milliseconds: 100),
                                     )),
                                     HoverAnimatedContainer(
                                       color: Colors.black26.withAlpha(30),
@@ -169,8 +235,7 @@ class _ModListState extends ConsumerState<ModList> {
                               Container(
                                 decoration: BoxDecoration(
                                     color: Colors.black26.withAlpha(30),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(3))),
+                                    borderRadius: const BorderRadius.all(Radius.circular(3))),
                                 height: imageHeight,
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -183,57 +248,47 @@ class _ModListState extends ConsumerState<ModList> {
                               ),
                             Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
-                                child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                        mod.name ?? "",
-                                        style: titleStyle,
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      )),
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 30),
-                                          child: IconButton(
-                                              onPressed: () {
-                                                // TODO
-                                                Clipboard.setData(
-                                                    ClipboardData());
-                                              },
-                                              icon: Icon(
-                                                Icons.link,
-                                                color: subtextColor,
-                                              )))
-                                    ])),
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  if (infoWidgets.isNotEmpty)
-                                    SizedBox(
-                                        width: cellWidth / 3,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ...infoWidgets.filter((i) =>
-                                                  infoWidgets.indexOf(i).isEven)
-                                            ])),
-                                  if (infoWidgets.isNotEmpty)
-                                    SizedBox(
-                                        width: cellWidth / 3,
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ...infoWidgets.filter((i) =>
-                                                  infoWidgets.indexOf(i).isOdd)
-                                            ]))
-                                ]),
+                                child:
+                                    Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                  Expanded(
+                                      child: Text(
+                                    mod.name ?? "",
+                                    style: titleStyle,
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  )),
+                                  Padding(
+                                      padding: const EdgeInsets.only(left: 30),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            // TODO
+                                            Clipboard.setData(ClipboardData());
+                                          },
+                                          icon: Icon(
+                                            Icons.link,
+                                            color: subtextColor,
+                                          )))
+                                ])),
+                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                              if (infoWidgets.isNotEmpty)
+                                SizedBox(
+                                    width: cellWidth / 3,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          ...infoWidgets
+                                              .filter((i) => infoWidgets.indexOf(i).isEven)
+                                        ])),
+                              if (infoWidgets.isNotEmpty)
+                                SizedBox(
+                                    width: cellWidth / 3,
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          ...infoWidgets.filter((i) => infoWidgets.indexOf(i).isOdd)
+                                        ]))
+                            ]),
                             const Divider(),
                             if (mod.summary != null)
                               Text(
@@ -248,24 +303,19 @@ class _ModListState extends ConsumerState<ModList> {
                                   child: Center(
                                       child: OutlinedButton(
                                           style: const ButtonStyle(
-                                              padding: MaterialStatePropertyAll(
-                                                  EdgeInsets.all(18))),
+                                              padding:
+                                                  MaterialStatePropertyAll(EdgeInsets.all(18))),
                                           onPressed: () {
-                                            _showMyDialog(context,
-                                                title: mod.name,
-                                                body: [
-                                                  MarkdownBody(
-                                                      data: mod.description ??
-                                                          mod.summary!)
-                                                ]);
+                                            _showMyDialog(context, title: mod.name, body: [
+                                              MarkdownBody(data: mod.description ?? mod.summary!)
+                                            ]);
                                           },
                                           child: const Text("Read More")))),
                             const Spacer(),
                             const Divider(),
                             Row(
                               children: [
-                                if (mod.urls?.containsKey("DirectDownload") ==
-                                    true)
+                                if (mod.urls?.containsKey("DirectDownload") == true)
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: CircleAvatar(
@@ -274,36 +324,26 @@ class _ModListState extends ConsumerState<ModList> {
                                           child: IconButton(
                                               onPressed: () {
                                                 launchUrl(
-                                                    Uri.parse(mod.urls?[
-                                                            "DirectDownload"] ??
-                                                        ""),
-                                                    webOnlyWindowName:
-                                                        "_blank");
+                                                    Uri.parse(mod.urls?["DirectDownload"] ?? ""),
+                                                    webOnlyWindowName: "_blank");
                                               },
-                                              icon: const Icon(
-                                                  Icons.file_download)))),
+                                              icon: const Icon(Icons.file_download)))),
                                 if (mod.urls?.containsKey("Discord") == true)
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            launchUrl(
-                                                Uri.parse(
-                                                    mod.urls?["Discord"] ?? ""),
+                                            launchUrl(Uri.parse(mod.urls?["Discord"] ?? ""),
                                                 webOnlyWindowName: "_blank");
                                           },
                                           style: buttonStyle,
                                           child: const Icon(Icons.discord))),
-                                if (mod.urls?.containsKey("DownloadPage") ==
-                                    true)
+                                if (mod.urls?.containsKey("DownloadPage") == true)
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            launchUrl(
-                                                Uri.parse(
-                                                    mod.urls?["DownloadPage"] ??
-                                                        ""),
+                                            launchUrl(Uri.parse(mod.urls?["DownloadPage"] ?? ""),
                                                 webOnlyWindowName: "_blank");
                                           },
                                           style: buttonStyle,
@@ -313,9 +353,7 @@ class _ModListState extends ConsumerState<ModList> {
                                       padding: const EdgeInsets.only(right: 10),
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            launchUrl(
-                                                Uri.parse(
-                                                    mod.urls?["Forum"] ?? ""),
+                                            launchUrl(Uri.parse(mod.urls?["Forum"] ?? ""),
                                                 webOnlyWindowName: "_blank");
                                           },
                                           style: buttonStyle,
@@ -330,7 +368,10 @@ class _ModListState extends ConsumerState<ModList> {
 }
 
 Future<void> _showMyDialog(BuildContext context,
-    {String? title, List<Widget>? body}) async {
+    {String? title,
+    List<Widget>? body,
+    double maxWidth = 900,
+    double maxHeight = double.infinity}) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
@@ -339,7 +380,7 @@ Future<void> _showMyDialog(BuildContext context,
         content: SingleChildScrollView(
           child: SelectionArea(
               child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 900),
+                  constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
                   child: ListBody(
                     children: body ?? [],
                   ))),
