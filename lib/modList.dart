@@ -29,9 +29,7 @@ class _ModListState extends ConsumerState<ModList> {
     final query = ref.watch(state.search);
     final mods = (query == null || modRepo == null)
         ? modRepo?.items
-        : TextSearch(modRepo.items
-                .map((element) => TextSearchItem(element, createSearchTags(element)))
-                .toList())
+        : TextSearch(modRepo.items.map((element) => TextSearchItem(element, createSearchTags(element))).toList())
             .search(query)
             .map((e) => e.object)
             .toList();
@@ -57,10 +55,7 @@ class _ModListState extends ConsumerState<ModList> {
               padding: const EdgeInsets.all(0),
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: cellWidth,
-                  mainAxisExtent: cellHeight,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10),
+                  maxCrossAxisExtent: cellWidth, mainAxisExtent: cellHeight, crossAxisSpacing: 10, mainAxisSpacing: 10),
               itemCount: mods.length,
               itemBuilder: (context, indexOfMod) {
                 final mod = mods[indexOfMod];
@@ -102,9 +97,7 @@ class _ModListState extends ConsumerState<ModList> {
                         ),
                         Padding(
                             padding: const EdgeInsets.only(left: 10),
-                            child: Text(
-                                DateFormat.yMd(locale)
-                                    .format(DateTime.parse(mod.dateTimeCreated ?? "")),
+                            child: Text(DateFormat.yMd(locale).format(DateTime.parse(mod.dateTimeCreated ?? "")),
                                 style: subTextStyle))
                       ],
                     ),
@@ -146,42 +139,51 @@ class _ModListState extends ConsumerState<ModList> {
                                           height: size.height - 100,
                                           child: DefaultTabController(
                                               length: images.length,
-                                              child: Scaffold(
-                                                appBar: AppBar(
-                                                    bottom: TabBar(
-                                                  tabs: [
-                                                    ...images
-                                                        .map((img) => Tab(text: img.filename))
-                                                        .toList(growable: false)
-                                                  ],
-                                                )),
-                                                body: TabBarView(
-                                                    physics: PageScrollPhysics(),
-                                                    children: [
+                                              child: Builder(builder: (BuildContext context) {
+                                                final tabber = DefaultTabController.of(context)!;
+                                                return Scaffold(
+                                                  appBar: AppBar(
+                                                      bottom: TabBar(
+                                                    tabs: [
                                                       ...images
-                                                          .map((img) => Stack(
-                                                                  alignment: Alignment.center,
-                                                                  children: [
-                                                                    Image.network(img.url ?? ""),
-                                                                    Row(
-                                                                      children: [
-                                                                        Container(
-                                                                          height: 100,
-                                                                          width: double.infinity,
-                                                                          color: Colors.black54
-                                                                              .withOpacity(1.0),
-                                                                        ),
-                                                                        Container(
-                                                                          height: 100,
-                                                                          color: Colors.black54
-                                                                              .withOpacity(1.0),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  ]))
+                                                          .map((img) => Tab(text: img.filename))
                                                           .toList(growable: false)
-                                                    ]),
-                                              ))
+                                                    ],
+                                                  )),
+                                                  body: TabBarView(physics: PageScrollPhysics(), children: [
+                                                    ...images.map((img) {
+                                                      return Stack(alignment: Alignment.center, children: [
+                                                        Image.network(img.url ?? ""),
+                                                        Row(
+                                                          children: [
+                                                            ConstrainedBox(
+                                                                constraints:
+                                                                    BoxConstraints(minWidth: 10, maxWidth: 120),
+                                                                child: Expanded(
+                                                                    child: InkWell(
+                                                                  overlayColor: MaterialStatePropertyAll(
+                                                                      Colors.black54.withOpacity(0.3)),
+                                                                  child: Container(),
+                                                                ))),
+                                                            Spacer(),
+                                                            GestureDetector(
+                                                                onTap: () {
+                                                                  tabber.animateTo(tabber.index + 1);
+                                                                },
+                                                                child: ConstrainedBox(
+                                                                    constraints:
+                                                                        BoxConstraints(minWidth: 10, maxWidth: 120),
+                                                                    child: Expanded(
+                                                                        child: Container(
+                                                                      color: Colors.black54.withOpacity(0.3),
+                                                                    )))),
+                                                          ],
+                                                        )
+                                                      ]);
+                                                    }).toList(growable: false)
+                                                  ]),
+                                                );
+                                              }))
                                           // ZoomablePhotoGallery(
                                           //     imageList: List.generate(
                                           //   images.length,
@@ -237,19 +239,16 @@ class _ModListState extends ConsumerState<ModList> {
                                     color: Colors.black26.withAlpha(30),
                                     borderRadius: const BorderRadius.all(Radius.circular(3))),
                                 height: imageHeight,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Opacity(
-                                        opacity: 0.3,
-                                        child: Icon(Icons.no_photography),
-                                      )
-                                    ]),
+                                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                                  Opacity(
+                                    opacity: 0.3,
+                                    child: Icon(Icons.no_photography),
+                                  )
+                                ]),
                               ),
                             Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
-                                child:
-                                    Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                                   Expanded(
                                       child: Text(
                                     mod.name ?? "",
@@ -276,18 +275,13 @@ class _ModListState extends ConsumerState<ModList> {
                                     width: cellWidth / 3,
                                     child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          ...infoWidgets
-                                              .filter((i) => infoWidgets.indexOf(i).isEven)
-                                        ])),
+                                        children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isEven)])),
                               if (infoWidgets.isNotEmpty)
                                 SizedBox(
                                     width: cellWidth / 3,
                                     child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          ...infoWidgets.filter((i) => infoWidgets.indexOf(i).isOdd)
-                                        ]))
+                                        children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isOdd)]))
                             ]),
                             const Divider(),
                             if (mod.summary != null)
@@ -302,13 +296,12 @@ class _ModListState extends ConsumerState<ModList> {
                                   padding: const EdgeInsets.only(top: 10),
                                   child: Center(
                                       child: OutlinedButton(
-                                          style: const ButtonStyle(
-                                              padding:
-                                                  MaterialStatePropertyAll(EdgeInsets.all(18))),
+                                          style:
+                                              const ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.all(18))),
                                           onPressed: () {
-                                            _showMyDialog(context, title: mod.name, body: [
-                                              MarkdownBody(data: mod.description ?? mod.summary!)
-                                            ]);
+                                            _showMyDialog(context,
+                                                title: mod.name,
+                                                body: [MarkdownBody(data: mod.description ?? mod.summary!)]);
                                           },
                                           child: const Text("Read More")))),
                             const Spacer(),
@@ -323,8 +316,7 @@ class _ModListState extends ConsumerState<ModList> {
                                           backgroundColor: Colors.black54,
                                           child: IconButton(
                                               onPressed: () {
-                                                launchUrl(
-                                                    Uri.parse(mod.urls?["DirectDownload"] ?? ""),
+                                                launchUrl(Uri.parse(mod.urls?["DirectDownload"] ?? ""),
                                                     webOnlyWindowName: "_blank");
                                               },
                                               icon: const Icon(Icons.file_download)))),
@@ -353,8 +345,7 @@ class _ModListState extends ConsumerState<ModList> {
                                       padding: const EdgeInsets.only(right: 10),
                                       child: ElevatedButton(
                                           onPressed: () {
-                                            launchUrl(Uri.parse(mod.urls?["Forum"] ?? ""),
-                                                webOnlyWindowName: "_blank");
+                                            launchUrl(Uri.parse(mod.urls?["Forum"] ?? ""), webOnlyWindowName: "_blank");
                                           },
                                           style: buttonStyle,
                                           child: const Text("FORUM"))),
@@ -368,10 +359,7 @@ class _ModListState extends ConsumerState<ModList> {
 }
 
 Future<void> _showMyDialog(BuildContext context,
-    {String? title,
-    List<Widget>? body,
-    double maxWidth = 900,
-    double maxHeight = double.infinity}) async {
+    {String? title, List<Widget>? body, double maxWidth = 900, double maxHeight = double.infinity}) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
