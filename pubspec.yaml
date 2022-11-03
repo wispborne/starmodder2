@@ -56,6 +56,7 @@ dependencies:
       ref: 5c51870ced62a00e809ba4b81a846a052d241c9f
   photo_view: ^0.14.0
   zoomable_photo_gallery: ^1.0.2+1
+  flutter_linkify: ^5.0.2
 
 dev_dependencies:
   json_serializable: ^6.5.0

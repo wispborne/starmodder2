@@ -1,12 +1,13 @@
 import 'package:dart_extensions_methods/dart_extension_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hovering/hovering.dart';
 import 'package:intl/intl.dart';
+import 'package:starmodder2/photoViewer.dart';
 import 'package:starmodder2/search.dart';
 import 'package:starmodder2/state.dart' as state;
+import 'package:starmodder2/utils.dart';
 import 'package:text_search/text_search.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -132,89 +133,8 @@ class _ModListState extends ConsumerState<ModList> {
                             if (mod.images?.values.isNotEmpty == true)
                               GestureDetector(
                                   onTap: () {
-                                    final size = MediaQuery.of(context).size;
-                                    _showMyDialog(context, maxWidth: size.width, body: [
-                                      SizedBox(
-                                          width: size.width,
-                                          height: size.height - 100,
-                                          child: DefaultTabController(
-                                              length: images.length,
-                                              child: Builder(builder: (BuildContext context) {
-                                                final tabber = DefaultTabController.of(context)!;
-                                                return Scaffold(
-                                                  appBar: AppBar(
-                                                      bottom: TabBar(
-                                                    tabs: [
-                                                      ...images
-                                                          .map((img) => Tab(text: img.filename))
-                                                          .toList(growable: false)
-                                                    ],
-                                                  )),
-                                                  body: TabBarView(physics: PageScrollPhysics(), children: [
-                                                    ...images.map((img) {
-                                                      return Stack(alignment: Alignment.center, children: [
-                                                        Image.network(img.url ?? ""),
-                                                        Row(
-                                                          children: [
-                                                            ConstrainedBox(
-                                                                constraints:
-                                                                    BoxConstraints(minWidth: 10, maxWidth: 120),
-                                                                child: Expanded(
-                                                                    child: InkWell(
-                                                                  overlayColor: MaterialStatePropertyAll(
-                                                                      Colors.black54.withOpacity(0.3)),
-                                                                  child: Container(),
-                                                                ))),
-                                                            Spacer(),
-                                                            GestureDetector(
-                                                                onTap: () {
-                                                                  tabber.animateTo(tabber.index + 1);
-                                                                },
-                                                                child: ConstrainedBox(
-                                                                    constraints:
-                                                                        BoxConstraints(minWidth: 10, maxWidth: 120),
-                                                                    child: Expanded(
-                                                                        child: Container(
-                                                                      color: Colors.black54.withOpacity(0.3),
-                                                                    )))),
-                                                          ],
-                                                        )
-                                                      ]);
-                                                    }).toList(growable: false)
-                                                  ]),
-                                                );
-                                              }))
-                                          // ZoomablePhotoGallery(
-                                          //     imageList: List.generate(
-                                          //   images.length,
-                                          //   (index) => Image.network(
-                                          //       images[index].url ?? ""),
-                                          // ),
-                                          //   height: size.height - 150,
-                                          // )
-                                          )
-                                      // SizedBox(
-                                      //     width: size.width,
-                                      //     height: size.height,
-                                      //     child: PhotoViewGallery.builder(
-                                      //       itemCount: images.length,
-                                      //       builder: (BuildContext context,
-                                      //               int index) =>
-                                      //           PhotoViewGalleryPageOptions(
-                                      //         imageProvider: NetworkImage(
-                                      //             images[index].url ?? ""),
-                                      //       ),
-                                      //       loadingBuilder:
-                                      //           (context, event) => Center(
-                                      //         child: Container(
-                                      //           width: 20.0,
-                                      //           height: 20.0,
-                                      //           child:
-                                      //               CircularProgressIndicator(),
-                                      //         ),
-                                      //       ),
-                                      //     ))
-                                    ]);
+                                    final windowSize = MediaQuery.of(context).size;
+                                    showMyDialog(context, maxWidth: windowSize.width, body: [PhotoViewer(images)]);
                                   },
                                   child: Stack(children: [
                                     Center(
@@ -231,7 +151,20 @@ class _ModListState extends ConsumerState<ModList> {
                                       cursor: SystemMouseCursors.click,
                                       hoverColor: Colors.black26.withAlpha(00),
                                       height: imageHeight,
-                                    )
+                                    ),
+                                    if (images.length > 1)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Padding(
+                                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                              child: Icon(
+                                                Icons.photo_library,
+                                                color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                                shadows: const [Shadow(blurRadius: 2)],
+                                              ))
+                                        ],
+                                      )
                                   ]))
                             else
                               Container(
@@ -247,7 +180,7 @@ class _ModListState extends ConsumerState<ModList> {
                                 ]),
                               ),
                             Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
+                                padding: const EdgeInsets.only(bottom: 10, top: 5),
                                 child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
                                   Expanded(
                                       child: Text(
@@ -257,17 +190,17 @@ class _ModListState extends ConsumerState<ModList> {
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   )),
-                                  Padding(
-                                      padding: const EdgeInsets.only(left: 30),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            // TODO
-                                            Clipboard.setData(ClipboardData());
-                                          },
-                                          icon: Icon(
-                                            Icons.link,
-                                            color: subtextColor,
-                                          )))
+                                  // Padding(
+                                  //     padding: const EdgeInsets.only(left: 30),
+                                  //     child: IconButton(
+                                  //         onPressed: () {
+                                  //           // TODO
+                                  //           Clipboard.setData(const ClipboardData());
+                                  //         },
+                                  //         icon: Icon(
+                                  //           Icons.link,
+                                  //           color: subtextColor,
+                                  //         )))
                                 ])),
                             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                               if (infoWidgets.isNotEmpty)
@@ -299,8 +232,8 @@ class _ModListState extends ConsumerState<ModList> {
                                           style:
                                               const ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.all(18))),
                                           onPressed: () {
-                                            _showMyDialog(context,
-                                                title: mod.name,
+                                            showMyDialog(context,
+                                                title: Text(mod.name ?? ""),
                                                 body: [MarkdownBody(data: mod.description ?? mod.summary!)]);
                                           },
                                           child: const Text("Read More")))),
@@ -308,47 +241,58 @@ class _ModListState extends ConsumerState<ModList> {
                             const Divider(),
                             Row(
                               children: [
-                                if (mod.urls?.containsKey("DirectDownload") == true)
+                                if (mod.urls?.containsKey(ModUrlType.DirectDownload.name) == true)
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child: CircleAvatar(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Colors.black54,
-                                          child: IconButton(
+                                      child: Tooltip(
+                                          message: mod.urls?[ModUrlType.DirectDownload.name],
+                                          child: CircleAvatar(
+                                              foregroundColor: Colors.white,
+                                              backgroundColor: Colors.black54,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    launchUrl(
+                                                        Uri.parse(mod.urls?[ModUrlType.DirectDownload.name] ?? ""),
+                                                        webOnlyWindowName: "_blank");
+                                                  },
+                                                  icon: const Icon(Icons.file_download))))),
+                                if (mod.urls?.containsKey(ModUrlType.Discord.name) == true)
+                                  Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: Tooltip(
+                                          message: mod.urls?[ModUrlType.Discord.name],
+                                          child: ElevatedButton(
                                               onPressed: () {
-                                                launchUrl(Uri.parse(mod.urls?["DirectDownload"] ?? ""),
+                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.Discord.name] ?? ""),
                                                     webOnlyWindowName: "_blank");
                                               },
-                                              icon: const Icon(Icons.file_download)))),
-                                if (mod.urls?.containsKey("Discord") == true)
+                                              style: buttonStyle,
+                                              child: const Icon(Icons.discord)))),
+                                if (mod.urls?.containsKey(ModUrlType.DownloadPage.name) == true &&
+                                    mod.urls?[ModUrlType.Forum.name] != mod.urls?[ModUrlType.DownloadPage.name])
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            launchUrl(Uri.parse(mod.urls?["Discord"] ?? ""),
-                                                webOnlyWindowName: "_blank");
-                                          },
-                                          style: buttonStyle,
-                                          child: const Icon(Icons.discord))),
-                                if (mod.urls?.containsKey("DownloadPage") == true)
+                                      child: Tooltip(
+                                          message: mod.urls?[ModUrlType.DownloadPage.name],
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.DownloadPage.name] ?? ""),
+                                                    webOnlyWindowName: "_blank");
+                                              },
+                                              style: buttonStyle,
+                                              child: const Text("WEBSITE")))),
+                                if (mod.urls?.containsKey(ModUrlType.Forum.name) == true)
                                   Padding(
                                       padding: const EdgeInsets.only(right: 10),
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            launchUrl(Uri.parse(mod.urls?["DownloadPage"] ?? ""),
-                                                webOnlyWindowName: "_blank");
-                                          },
-                                          style: buttonStyle,
-                                          child: const Text("WEBSITE"))),
-                                if (mod.urls?.containsKey("Forum") == true)
-                                  Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            launchUrl(Uri.parse(mod.urls?["Forum"] ?? ""), webOnlyWindowName: "_blank");
-                                          },
-                                          style: buttonStyle,
-                                          child: const Text("FORUM"))),
+                                      child: Tooltip(
+                                          message: mod.urls?[ModUrlType.Forum.name],
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.Forum.name] ?? ""),
+                                                    webOnlyWindowName: "_blank");
+                                              },
+                                              style: buttonStyle,
+                                              child: const Text("FORUM")))),
                               ],
                             )
                           ],
@@ -358,30 +302,9 @@ class _ModListState extends ConsumerState<ModList> {
   }
 }
 
-Future<void> _showMyDialog(BuildContext context,
-    {String? title, List<Widget>? body, double maxWidth = 900, double maxHeight = double.infinity}) async {
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: title == null ? null : Text(title),
-        content: SingleChildScrollView(
-          child: SelectionArea(
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
-                  child: ListBody(
-                    children: body ?? [],
-                  ))),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Close'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
+enum ModUrlType {
+  DirectDownload,
+  Discord,
+  Forum,
+  DownloadPage,
 }
