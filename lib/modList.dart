@@ -28,11 +28,17 @@ class _ModListState extends ConsumerState<ModList> {
   Widget build(BuildContext context) {
     final modRepo = ref.watch(state.allMods);
     final query = ref.watch(state.search);
-    final mods = (query == null || modRepo == null)
+    final mods = (query == null || query.isEmpty || modRepo == null)
         ? modRepo?.items
-        : TextSearch(modRepo.items.map((element) => TextSearchItem(element, createSearchTags(element))).toList())
-            .search(query)
-            .map((e) => e.object)
+        : query
+            .split(",")
+            .map((it) => it.trim())
+            .filter((it) => it.isNotNullOrEmpty())
+            .map((queryPart) =>
+                TextSearch(modRepo.items.map((mod) => TextSearchItem(mod, createSearchTags(mod))).toList())
+                    .search(queryPart)
+                    .map((e) => e.object))
+            .intersect()
             .toList();
     final locale = ref.watch(state.locale);
 
@@ -53,7 +59,8 @@ class _ModListState extends ConsumerState<ModList> {
       child: mods == null
           ? const Text("Fetching...")
           : GridView.builder(
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.only(top: 20),
+              clipBehavior: Clip.none,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: cellWidth, mainAxisExtent: cellHeight, crossAxisSpacing: 10, mainAxisSpacing: 10),

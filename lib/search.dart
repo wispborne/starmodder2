@@ -1,4 +1,5 @@
 import 'package:starmodder2/models/modInfo.dart';
+import 'package:starmodder2/utils.dart';
 import 'package:stringr/stringr.dart';
 
 String createSearchIndex(ModInfo modInfo) =>
@@ -11,16 +12,13 @@ List<String> createSearchTags(ModInfo modInfo) {
     alphaName,
     ...?alphaName?.split("-"),
     ((alphaName?.split("-").length ?? 0) > 0)
-        ? alphaName!
-            .split("-")
-            .where((element) => element.isNotEmpty)
-            .map((e) => e.substring(0, 1))
-            .join()
+        ? alphaName!.split("-").where((element) => element.isNotEmpty).map((e) => e.substring(0, 1)).join()
         : null,
     ...?modInfo.authorsList,
     ...?modInfo.categories,
-    ...?modInfo.sources
-  ].whereType<String>().toList();
+    modInfo.gameVersionReq,
+    ...?modInfo.sources?.map((e) => modSourcesByJsonKey[e]?.displayName).whereType<String>()
+  ].whereType<String>().map((e) => e.toLowerCase()).toList();
   // Fimber.v(tags.join("\n"));
   return tags;
 }

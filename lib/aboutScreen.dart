@@ -15,6 +15,7 @@ showAboutScreenDialog(BuildContext context) {
           appTitle,
           style: theme.textTheme.titleLarge?.copyWith(fontSize: 24),
         ),
+        Text("version $version", style: theme.textTheme.labelLarge),
         Text(subtitle, style: theme.textTheme.labelLarge),
         Text("by Wisp", style: theme.textTheme.labelLarge),
         const Divider(),
@@ -54,6 +55,11 @@ showAboutScreenDialog(BuildContext context) {
                 ])),
                 Linkify(
                   text: "Source Code: https://github.com/wispborne/starmodder2",
+                  linkifiers: const [UrlLinkifier()],
+                  onOpen: (link) => launchUrl(Uri.parse(link.url)),
+                ),
+                Linkify(
+                  text: "Raw data: https://github.com/wispborne/StarsectorModRepo",
                   linkifiers: const [UrlLinkifier()],
                   onOpen: (link) => launchUrl(Uri.parse(link.url)),
                 ),

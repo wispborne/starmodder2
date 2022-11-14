@@ -17,7 +17,8 @@ import 'aboutScreen.dart';
 import 'business.dart';
 import 'models/modRepo.dart';
 
-const appTitle = "Starmodder 2.0";
+const appTitle = "Starmodder 2";
+const version = "2.1";
 const subtitle = "An unofficial Starsector mod database";
 
 void main() {
@@ -42,7 +43,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           primarySwatch: Colors.cyan,
           accentColor: Colors.cyanAccent,
         ),
-        dark: Themes.basic,
+        dark: Themes.starsectorLauncher,
         initial: AdaptiveThemeMode.dark,
         builder: (theme, darkTheme) => MaterialApp.router(
               title: appTitle,
@@ -90,9 +91,12 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = TextEditingController();
+    var lastUpdatedDate = DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z").toLocal();
+
     return Scaffold(
       appBar: AppBar(
           toolbarHeight: 70,
+          shadowColor: Colors.black,
           title: Row(
             children: [
               Expanded(
@@ -144,8 +148,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         Padding(
             padding: const EdgeInsets.only(left: 15, top: 10),
             child: Text(
-                // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
-              "generated ${DateFormat.MMMd().add_jm().format(DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z").toLocal())}",
+              // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
+              "generated ${DateFormat.MMMd().add_jm().format(lastUpdatedDate)} ${lastUpdatedDate.timeZoneName}",
               style: theme.textTheme.labelMedium?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
             )),
         Center(

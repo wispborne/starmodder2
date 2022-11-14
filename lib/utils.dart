@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:dart_extensions_methods/dart_extension_methods.dart';
 import 'package:flutter/material.dart';
 
 extension Append on String {
@@ -11,6 +12,12 @@ extension Append on String {
 extension ListExt<T> on List<T> {
   T random() {
     return this[Random().nextInt(length - 1)];
+  }
+}
+
+extension ItrItrExt<T> on Iterable<Iterable<T>> {
+  Iterable<T> intersect() {
+    return fold<Set<T>>(first.toSet(), (a, b) => a.intersection(b.toSet()));
   }
 }
 
@@ -40,4 +47,25 @@ Future<void> showMyDialog(BuildContext context,
       );
     },
   );
+}
+
+final modSourcesByJsonKey = {
+  ModSourceEnum.Index.name: ModSource(ModSourceEnum.Index, "Forum"),
+  ModSourceEnum.Discord.name: ModSource(ModSourceEnum.Discord, "Discord"),
+  ModSourceEnum.NexusMods.name: ModSource(ModSourceEnum.NexusMods, "Nexus"),
+  ModSourceEnum.ModdingSubforum.name: ModSource(ModSourceEnum.ModdingSubforum, "Forum"),
+};
+
+enum ModSourceEnum {
+  Index,
+  ModdingSubforum,
+  Discord,
+  NexusMods,
+}
+
+class ModSource {
+  ModSource(this.modEnum, this.displayName);
+
+  final ModSourceEnum modEnum;
+  final String displayName;
 }
