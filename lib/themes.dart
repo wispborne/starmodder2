@@ -4,7 +4,7 @@ var darkTheme = ThemeData(brightness: Brightness.dark);
 
 class Themes {
   static final basic = ThemeData.dark(useMaterial3: true)
-      .copyWith(brightness: Brightness.dark, primaryColor: Colors.cyan, accentColor: Colors.cyanAccent);
+      .copyWith(brightness: Brightness.dark, primaryColor: Colors.cyan, hintColor: Colors.cyanAccent);
 
   static final starsectorLauncher = darkTheme.copyWith(
       colorScheme: darkTheme.colorScheme.copyWith(

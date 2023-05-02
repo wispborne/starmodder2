@@ -1,6 +1,6 @@
 import 'package:dart_extensions_methods/dart_extension_methods.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_selectionarea/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hovering/hovering.dart';
 import 'package:intl/intl.dart';
@@ -129,7 +129,7 @@ class _ModListState extends ConsumerState<ModList> {
                 ];
                 var images = mod.images?.values.toList(growable: false) ?? [];
 
-                return Card(
+                return SelectionArea(child: Card(
                     elevation: 5,
                     child: Padding(
                         padding: const EdgeInsets.all(10),
@@ -179,7 +179,7 @@ class _ModListState extends ConsumerState<ModList> {
                                     color: Colors.black26.withAlpha(30),
                                     borderRadius: const BorderRadius.all(Radius.circular(3))),
                                 height: imageHeight,
-                                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+                                child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                                   Opacity(
                                     opacity: 0.3,
                                     child: Icon(Icons.no_photography),
@@ -303,7 +303,7 @@ class _ModListState extends ConsumerState<ModList> {
                               ],
                             )
                           ],
-                        )));
+                        ))));
               }),
     );
   }

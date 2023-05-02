@@ -2,11 +2,15 @@ import 'dart:math';
 
 import 'package:dart_extensions_methods/dart_extension_methods.dart';
 import 'package:flutter/material.dart';
+import 'package:stringr/stringr.dart';
 
+final _upperReg = RegExp(r'[A-Z]');
 extension Append on String {
   String prepend(String text) => text + this;
 
   String append(String text) => this + text;
+
+  String acronym() => split(" ").map((e) => e.first(1).upperCase() + e.chars().skip(1).filter((element) => element?.contains(_upperReg) ?? false).join()).join();
 }
 
 extension ListExt<T> on List<T> {

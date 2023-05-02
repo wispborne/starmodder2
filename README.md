@@ -1,16 +1,16 @@
-# starmodder2
+# Starmodder 2
 
-An unofficial Starsector mod database.
+A browser for my unofficial Starsector mod database.
 
-## Getting Started
+Starmodder 1 may be found at <https://starmodder.pages.dev/mods/home/>. It works just fine, and better in some ways.
 
-This project is a starting point for a Flutter application.
+Starmodder 1 is a basic website that's almost entirely HTML, with a little javascript.
 
-A few resources to get you started if this is your first Flutter project:
+Starmodder 2 is written using Flutter, which compiles to a Javascript website. It loads images dynamically and has better search (it supports acronyms).
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Changelog
+
+2.1
+- Fixed "last updated" date.
+- Description markdown is now selectable.

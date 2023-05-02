@@ -22,6 +22,7 @@ const version = "2.1";
 const subtitle = "An unofficial Starsector mod database";
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   initLogging(printPlatformInfo: true);
   setWindowTitle(appTitle);
   runApp(const ProviderScope(child: MyApp()));
@@ -41,7 +42,7 @@ class _MyAppState extends ConsumerState<MyApp> {
         light: ThemeData(
           brightness: Brightness.light,
           primarySwatch: Colors.cyan,
-          accentColor: Colors.cyanAccent,
+          hintColor: Colors.cyanAccent
         ),
         dark: Themes.starsectorLauncher,
         initial: AdaptiveThemeMode.dark,
@@ -59,7 +60,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(title: appTitle, query: state.queryParams["q"]);
+          return MyHomePage(title: appTitle, query: state.queryParameters["q"]);
         },
       )
     ],
@@ -91,7 +92,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = TextEditingController();
-    var lastUpdatedDate = DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z").toLocal();
 
     return Scaffold(
       appBar: AppBar(
@@ -145,13 +145,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             ],
           )),
       body: Stack(children: [
-        Padding(
-            padding: const EdgeInsets.only(left: 15, top: 10),
-            child: Text(
-              // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
-              "generated ${DateFormat.MMMd().add_jm().format(lastUpdatedDate)} ${lastUpdatedDate.timeZoneName}",
-              style: theme.textTheme.labelMedium?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
-            )),
+        Padding(padding: const EdgeInsets.only(left: 15, top: 10), child: GeneratedTimeText()),
         Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -182,4 +176,21 @@ void refresh(WidgetRef ref) {
     Fimber.i("Updating state with ${value?.totalCount} new mods.");
     return ref.read(appState.allMods.notifier).update((state) => value);
   });
+}
+
+class GeneratedTimeText extends ConsumerWidget {
+  const GeneratedTimeText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var lastUpdatedDate = DateTime.parse(ref.watch(appState.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z");
+    final theme = Theme.of(context);
+    return Text(
+      // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
+      "generated ${DateFormat.MMMd().add_jm().format(lastUpdatedDate)} ${lastUpdatedDate.timeZoneName.acronym()}",
+      style: theme.textTheme.labelMedium?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
+    );
+  }
 }

@@ -24,7 +24,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
         child: DefaultTabController(
             length: images.length,
             child: Builder(builder: (BuildContext context) {
-              final tabber = DefaultTabController.of(context)!;
+              final tabber = DefaultTabController.of(context);
 
               return CallbackShortcuts(
                   bindings: {
