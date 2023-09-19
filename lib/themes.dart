@@ -8,11 +8,13 @@ class Themes {
 
   static final starsectorLauncher = darkTheme.copyWith(
       colorScheme: darkTheme.colorScheme.copyWith(
-          primary: const Color.fromRGBO(73, 252, 255, 1),
-          secondary: const Color.fromRGBO(59, 203, 232, 1),
-          tertiary: const Color.fromRGBO(0, 255, 255, 1)),
+        primary: const Color.fromRGBO(73, 252, 255, 1),
+        secondary: const Color.fromRGBO(59, 203, 232, 1),
+        tertiary: const Color.fromRGBO(0, 255, 255, 1),
+        surface: const Color(0xFF19223B),
+      ),
       scaffoldBackgroundColor: const Color.fromRGBO(14, 22, 43, 1),
-      cardColor: const Color.fromRGBO(37, 44, 65, 1),
+      cardColor: const Color.fromRGBO(25, 34, 59, 1.0),
       appBarTheme: darkTheme.appBarTheme.copyWith(backgroundColor: const Color.fromRGBO(32, 41, 65, 1.0)),
       dialogBackgroundColor: const Color.fromRGBO(14, 22, 43, 1));
 }

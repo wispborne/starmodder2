@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:starmodder2/models/modImage.dart';
@@ -44,12 +46,16 @@ class _PhotoViewerState extends State<PhotoViewer> {
                         )),
                         body: TabBarView(children: [
                           ...images.mapIndex((img, index) {
+                            var blurAmount = img.filename?.startsWith("SPOILER_") == true ? 30.0 : 0.0;
                             return Stack(alignment: Alignment.center, children: [
-                              InteractiveViewer(
-                                  minScale: 1.0,
-                                  clipBehavior: Clip.none,
-                                  maxScale: 3.0,
-                                  child: Image.network(img.url ?? "")),
+                              ImageFiltered(
+                                imageFilter: ImageFilter.blur(sigmaX: blurAmount, sigmaY: blurAmount),
+                                child: InteractiveViewer(
+                                    minScale: 1.0,
+                                    clipBehavior: Clip.none,
+                                    maxScale: 3.0,
+                                    child: Image.network(img.url ?? "")),
+                              ),
                               Row(
                                 children: [
                                   if (index > 0)

@@ -18,7 +18,7 @@ import 'business.dart';
 import 'models/modRepo.dart';
 
 const appTitle = "Starmodder 2";
-const version = "2.1";
+const version = "2.2";
 const subtitle = "An unofficial Starsector mod database";
 
 void main() {
@@ -39,11 +39,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     return AdaptiveTheme(
-        light: ThemeData(
-          brightness: Brightness.light,
-          primarySwatch: Colors.cyan,
-          hintColor: Colors.cyanAccent
-        ),
+        light: ThemeData(brightness: Brightness.light, primarySwatch: Colors.cyan, hintColor: Colors.cyanAccent),
         dark: Themes.starsectorLauncher,
         initial: AdaptiveThemeMode.dark,
         builder: (theme, darkTheme) => MaterialApp.router(
@@ -60,7 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(title: appTitle, query: state.queryParameters["q"]);
+          return MyHomePage(title: appTitle, query: state.pathParameters["q"]);
         },
       )
     ],
@@ -110,29 +106,41 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 SizedBox(
                     width: 500,
-                    child: TextField(
-                        autofocus: true,
-                        controller: controller,
-                        onChanged: (text) => ref.read(appState.search.notifier).update((state) => text),
-                        decoration: InputDecoration(
-                            hintText: "Search",
-                            icon: const Icon(Icons.search),
-                            suffix: InkWell(
-                                onTap: () {
-                                  controller.clear();
-                                  ref.read(appState.search.notifier).update((state) => null);
-                                },
-                                child: const SizedBox(
-                                    height: 16,
-                                    child: Icon(
-                                      Icons.clear,
-                                      size: 16.0,
-                                    ))),
-                            isDense: true))),
+                    height: 35,
+                    child:
+                        // SearchAnchor(
+                        // builder: (context, controller) => SearchBar(
+                        //       controller: controller,
+                        //       leading: const Icon(Icons.search),
+                        //       onChanged: (text) {
+                        //         controller.text = text;
+                        //       },
+                        //     ),
+                        // suggestionsBuilder: (context, controller)  => []),
+                        TextField(
+                            autofocus: true,
+                            controller: controller,
+                            onChanged: (text) => ref.read(appState.search.notifier).update((state) => text),
+                            decoration: InputDecoration(
+                                hintText: "Search",
+                                // icon: const Icon(Icons.search),
+                                prefixIcon: const Icon(Icons.search),
+                                suffix: InkWell(
+                                    onTap: () {
+                                      controller.clear();
+                                      ref.read(appState.search.notifier).update((state) => null);
+                                    },
+                                    child: const SizedBox(
+                                        height: 16,
+                                        child: Icon(
+                                          Icons.clear,
+                                          size: 16.0,
+                                        ))),
+                                isDense: true))),
                 Padding(
                     padding: const EdgeInsets.only(top: 7),
                     child: Text(
-                      "Search using name, author, game version, category, or source (eg Discord).",
+                      "Search using name, author, game version, category, or source (eg Discord)",
                       style: theme.textTheme.labelMedium
                           ?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
                     ))
