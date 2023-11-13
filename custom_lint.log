@@ -1,0 +1,84 @@
+The Dart VM service is listening on http://127.0.0.1:52165/qngi8gPMtDY=/
+The Dart DevTools debugger and profiler is available at: http://127.0.0.1:52165/qngi8gPMtDY=/devtools?uri=ws://127.0.0.1:52165/qngi8gPMtDY=/ws
+The Dart VM service is listening on http://127.0.0.1:52274/oQ1QtAZ29T4=/
+The Dart DevTools debugger and profiler is available at: http://127.0.0.1:52274/oQ1QtAZ29T4=/devtools?uri=ws://127.0.0.1:52274/oQ1QtAZ29T4=/ws
+The Dart VM service is listening on http://127.0.0.1:52372/IRKRfgbs11U=/
+The Dart DevTools debugger and profiler is available at: http://127.0.0.1:52372/IRKRfgbs11U=/devtools?uri=ws://127.0.0.1:52372/IRKRfgbs11U=/ws
+The request edit.getAssists failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+A request throw the exception:Bad state: Unable to find the context to C:\Users\whitm\AppData\Local\Pub\Cache\hosted\pub.dev\riverpod_annotation-2.3.0\lib\src\riverpod_annotation.dart
+#0      AnalysisContextCollectionImpl.contextFor (package:analyzer/src/dart/analysis/analysis_context_collection.dart:149:5)
+#1      _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:406:47)
+<asynchronous suspension>
+#2      ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+<asynchronous suspension>
+#3      ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+<asynchronous suspension>
+
+at:
+#0      SocketCustomLintServerToClientChannel.sendCustomLintRequest.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:271:11)
+#1      _$_CustomLintResponseAnalyzerPluginResponse.map (package:custom_lint/src/v2/protocol.freezed.dart:924:34)
+#2      SocketCustomLintServerToClientChannel.sendCustomLintRequest (package:custom_lint/src/v2/server_to_client_channel.dart:265:14)
+<asynchronous suspension>
+#3      SocketCustomLintServerToClientChannel.sendAnalyzerPluginRequest (package:custom_lint/src/v2/server_to_client_channel.dart:242:22)
+<asynchronous suspension>
+#4      CustomLintServer._handleRequest.<anonymous closure>.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:177:17)
+<asynchronous suspension>
+#5      PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#6      CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:160:22)
+<asynchronous suspension>
+
+The request edit.getAssists failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+A request throw the exception:Bad state: Unable to find the context to C:\Users\whitm\AppData\Local\Pub\Cache\hosted\pub.dev\riverpod_annotation-2.3.0\lib\src\riverpod_annotation.dart
+#0      AnalysisContextCollectionImpl.contextFor (package:analyzer/src/dart/analysis/analysis_context_collection.dart:149:5)
+#1      _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:406:47)
+<asynchronous suspension>
+#2      ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+<asynchronous suspension>
+#3      ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+<asynchronous suspension>
+
+at:
+#0      SocketCustomLintServerToClientChannel.sendCustomLintRequest.<anonymous closure> (package:custom_lint/src/v2/server_to_client_channel.dart:271:11)
+#1      _$_CustomLintResponseAnalyzerPluginResponse.map (package:custom_lint/src/v2/protocol.freezed.dart:924:34)
+#2      SocketCustomLintServerToClientChannel.sendCustomLintRequest (package:custom_lint/src/v2/server_to_client_channel.dart:265:14)
+<asynchronous suspension>
+#3      SocketCustomLintServerToClientChannel.sendAnalyzerPluginRequest (package:custom_lint/src/v2/server_to_client_channel.dart:242:22)
+<asynchronous suspension>
+#4      CustomLintServer._handleRequest.<anonymous closure>.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:177:17)
+<asynchronous suspension>
+#5      PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#6      CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:160:22)
+<asynchronous suspension>
+
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 Plugin WrapWithConsumer threw while analyzing F:\Code\Starsector\starmodder2\lib\state.dart:
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 InconsistentAnalysisException: Requested result might be inconsistent with previously returned results
+[WrapWithConsumer] 2023-11-12T23:29:30.593172
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #0      AnalysisSessionImpl._checkConsistency (package:analyzer/src/dart/analysis/session.dart:135:7)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #1      AnalysisSessionImpl.getResolvedUnit (package:analyzer/src/dart/analysis/session.dart:121:5)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #2      ChangeBuilderImpl._createDartFileEditBuilder (package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart:287:33)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #3      ChangeBuilderImpl.addDartFileEdit (package:analyzer_plugin/src/utilities/change_builder/change_builder_core.dart:136:23)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #4      _ChangeBuilderImpl.addDartFileEdit (package:custom_lint_core/src/change_reporter.dart:116:33)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #5      FunctionalToClassBasedProvider.run.<anonymous closure> (package:riverpod_lint/src/assists/functional_to_class_based_provider.dart:35:21)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #6      _RiverpodAstRegistryVisitor._runSubscriptions (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:961:12)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #7      _RiverpodAstRegistryVisitor.visitFunctionalProviderDeclaration (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:923:5)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #8      FunctionalProviderDeclaration.accept (package:riverpod_analyzer_utils/src/riverpod_ast/generator_provider_declaration.dart:386:13)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #9      ResolvedRiverpodLibraryResult.visitChildren (package:riverpod_analyzer_utils/src/riverpod_ast/resolve_riverpod.dart:72:19)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #10     _RiverpodAstRegistryVisitor.visitResolvedRiverpodUnit (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:870:12)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #11     ResolvedRiverpodLibraryResult.accept (package:riverpod_analyzer_utils/src/riverpod_ast/resolve_riverpod.dart:59:13)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #12     RiverpodAstRegistry.run (package:riverpod_analyzer_utils/src/riverpod_ast/visitor.dart:517:10)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #13     _ParseRiverpod._setupRiverpod.<anonymous closure> (package:riverpod_lint/src/riverpod_custom_lint.dart:92:47)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #14     _rootRun (dart:async/zone.dart:1399:13)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #15     _CustomZone.run (dart:async/zone.dart:1301:19)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #16     _CustomZone.bindCallback.<anonymous closure> (dart:async/zone.dart:1233:23)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #17     runPostRunCallbacks (package:custom_lint_core/src/plugin_base.dart:16:19)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #18     _ClientAnalyzerPlugin.handleEditGetAssists (package:custom_lint_builder/src/client.dart:463:5)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 <asynchronous suspension>
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #19     ServerPlugin._getResponse (package:analyzer_plugin/plugin/plugin.dart:556:18)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 <asynchronous suspension>
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 #20     ServerPlugin._onRequest (package:analyzer_plugin/plugin/plugin.dart:599:18)
+[WrapWithConsumer] 2023-11-12T23:29:30.593172 <asynchronous suspension>
+[WrapWithConsumer] 2023-11-12T23:29:30.593172

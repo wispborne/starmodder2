@@ -42,7 +42,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                       child: Scaffold(
                         appBar: AppBar(
                             bottom: TabBar(
-                          tabs: [...images.map((img) => Tab(text: img.filename)).toList(growable: false)],
+                          tabs: [...images.map((img) => Tab(text: img.filename))],
                         )),
                         body: TabBarView(children: [
                           ...images.mapIndex((img, index) {
@@ -90,7 +90,7 @@ class _PhotoViewerState extends State<PhotoViewer> {
                                 ],
                               )
                             ]);
-                          }).toList(growable: false)
+                          })
                         ]),
                       )));
             })));

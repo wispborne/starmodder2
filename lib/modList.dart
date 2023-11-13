@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hovering/hovering.dart';
 import 'package:intl/intl.dart';
 import 'package:starmodder2/photoViewer.dart';
-import 'package:starmodder2/search.dart';
 import 'package:starmodder2/state.dart' as state;
 import 'package:starmodder2/utils.dart';
-import 'package:text_search/text_search.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,20 +24,7 @@ class _ModListState extends ConsumerState<ModList> {
 
   @override
   Widget build(BuildContext context) {
-    final modRepo = ref.watch(state.allMods);
-    final query = ref.watch(state.search);
-    final mods = (query == null || query.isEmpty || modRepo == null)
-        ? modRepo?.items
-        : query
-            .split(",")
-            .map((it) => it.trim())
-            .filter((it) => it.isNotNullOrEmpty())
-            .map((queryPart) =>
-                TextSearch(modRepo.items.map((mod) => TextSearchItem(mod, createSearchTags(mod))).toList())
-                    .search(queryPart)
-                    .map((e) => e.object))
-            .intersect()
-            .toList();
+    final mods = ref.watch(state.searchResultsProvider);
     final locale = ref.watch(state.locale);
 
     final theme = Theme.of(context);
@@ -129,181 +114,189 @@ class _ModListState extends ConsumerState<ModList> {
                 ];
                 var images = mod.images?.values.toList(growable: false) ?? [];
 
-                return SelectionArea(child: Card(
-                    elevation: 5,
-                    child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (mod.images?.values.isNotEmpty == true)
-                              GestureDetector(
-                                  onTap: () {
-                                    final windowSize = MediaQuery.of(context).size;
-                                    showMyDialog(context, maxWidth: windowSize.width, body: [PhotoViewer(images)]);
-                                  },
-                                  child: Stack(children: [
-                                    Center(
-                                        child: FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: mod.images?.values.first.url ?? "",
-                                      width: imageWidth,
-                                      height: imageHeight,
-                                      fit: BoxFit.fitWidth,
-                                      fadeInDuration: const Duration(milliseconds: 100),
-                                    )),
-                                    HoverAnimatedContainer(
-                                      color: Colors.black26.withAlpha(30),
-                                      cursor: SystemMouseCursors.click,
-                                      hoverColor: Colors.black26.withAlpha(00),
-                                      height: imageHeight,
-                                    ),
-                                    if (images.length > 1)
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-                                              child: Icon(
-                                                Icons.photo_library,
-                                                color: theme.colorScheme.onSurface.withOpacity(0.5),
-                                                shadows: const [Shadow(blurRadius: 2)],
-                                              ))
-                                        ],
-                                      )
-                                  ]))
-                            else
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.black26.withAlpha(30),
-                                    borderRadius: const BorderRadius.all(Radius.circular(3))),
-                                height: imageHeight,
-                                child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                  Opacity(
-                                    opacity: 0.3,
-                                    child: Icon(Icons.no_photography),
-                                  )
-                                ]),
-                              ),
-                            Padding(
-                                padding: const EdgeInsets.only(bottom: 10, top: 5),
-                                child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                                  Expanded(
-                                      child: Text(
-                                    mod.name ?? "",
-                                    style: titleStyle,
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  )),
-                                  // Padding(
-                                  //     padding: const EdgeInsets.only(left: 30),
-                                  //     child: IconButton(
-                                  //         onPressed: () {
-                                  //           // TODO
-                                  //           Clipboard.setData(const ClipboardData());
-                                  //         },
-                                  //         icon: Icon(
-                                  //           Icons.link,
-                                  //           color: subtextColor,
-                                  //         )))
-                                ])),
-                            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                              if (infoWidgets.isNotEmpty)
-                                SizedBox(
-                                    width: cellWidth / 3,
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isEven)])),
-                              if (infoWidgets.isNotEmpty)
-                                SizedBox(
-                                    width: cellWidth / 3,
-                                    child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isOdd)]))
-                            ]),
-                            const Divider(),
-                            if (mod.summary != null)
-                              Text(
-                                mod.summary!,
-                                maxLines: 3,
-                                softWrap: true,
-                                overflow: TextOverflow.fade,
-                              ),
-                            if (mod.summary != null)
-                              Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Center(
-                                      child: OutlinedButton(
-                                          style:
-                                              const ButtonStyle(padding: MaterialStatePropertyAll(EdgeInsets.all(18))),
-                                          onPressed: () {
-                                            showMyDialog(context,
-                                                title: Text(mod.name ?? ""),
-                                                body: [MarkdownBody(data: mod.description ?? mod.summary!)]);
-                                          },
-                                          child: const Text("Read More")))),
-                            const Spacer(),
-                            const Divider(),
-                            Row(
+                return SelectionArea(
+                    child: Card(
+                        elevation: 5,
+                        child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (mod.urls?.containsKey(ModUrlType.DirectDownload.name) == true)
+                                if (mod.images?.values.isNotEmpty == true)
+                                  GestureDetector(
+                                      onTap: () {
+                                        final windowSize = MediaQuery.of(context).size;
+                                        showMyDialog(context, maxWidth: windowSize.width, body: [PhotoViewer(images)]);
+                                      },
+                                      child: Stack(children: [
+                                        Center(
+                                            child: FadeInImage.memoryNetwork(
+                                          placeholder: kTransparentImage,
+                                          image: mod.images?.values.first.url ?? "",
+                                          width: imageWidth,
+                                          height: imageHeight,
+                                          fit: BoxFit.fitWidth,
+                                          fadeInDuration: const Duration(milliseconds: 100),
+                                        )),
+                                        HoverAnimatedContainer(
+                                          color: Colors.black26.withAlpha(30),
+                                          cursor: SystemMouseCursors.click,
+                                          hoverColor: Colors.black26.withAlpha(00),
+                                          height: imageHeight,
+                                        ),
+                                        if (images.length > 1)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                                                  child: Icon(
+                                                    Icons.photo_library,
+                                                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                                                    shadows: const [Shadow(blurRadius: 2)],
+                                                  ))
+                                            ],
+                                          )
+                                      ]))
+                                else
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.black26.withAlpha(30),
+                                        borderRadius: const BorderRadius.all(Radius.circular(3))),
+                                    height: imageHeight,
+                                    child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      Opacity(
+                                        opacity: 0.3,
+                                        child: Icon(Icons.no_photography),
+                                      )
+                                    ]),
+                                  ),
+                                Padding(
+                                    padding: const EdgeInsets.only(bottom: 10, top: 5),
+                                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                      Expanded(
+                                          child: Text(
+                                        mod.name ?? "",
+                                        style: titleStyle,
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      )),
+                                      // Padding(
+                                      //     padding: const EdgeInsets.only(left: 30),
+                                      //     child: IconButton(
+                                      //         onPressed: () {
+                                      //           // TODO
+                                      //           Clipboard.setData(const ClipboardData());
+                                      //         },
+                                      //         icon: Icon(
+                                      //           Icons.link,
+                                      //           color: subtextColor,
+                                      //         )))
+                                    ])),
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  if (infoWidgets.isNotEmpty)
+                                    SizedBox(
+                                        width: cellWidth / 3,
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isEven)])),
+                                  if (infoWidgets.isNotEmpty)
+                                    SizedBox(
+                                        width: cellWidth / 3,
+                                        child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [...infoWidgets.filter((i) => infoWidgets.indexOf(i).isOdd)]))
+                                ]),
+                                const Divider(),
+                                if (mod.summary != null)
+                                  Text(
+                                    mod.summary!,
+                                    maxLines: 3,
+                                    softWrap: true,
+                                    overflow: TextOverflow.fade,
+                                  ),
+                                if (mod.summary != null)
                                   Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Tooltip(
-                                          message: mod.urls?[ModUrlType.DirectDownload.name],
-                                          child: CircleAvatar(
-                                              foregroundColor: Colors.white,
-                                              backgroundColor: Colors.black54,
-                                              child: IconButton(
+                                      padding: const EdgeInsets.only(top: 10),
+                                      child: Center(
+                                          child: OutlinedButton(
+                                              style: const ButtonStyle(
+                                                  padding: MaterialStatePropertyAll(EdgeInsets.all(18))),
+                                              onPressed: () {
+                                                showMyDialog(context,
+                                                    title: Text(mod.name ?? ""),
+                                                    body: [MarkdownBody(data: mod.description ?? mod.summary!)]);
+                                              },
+                                              child: const Text("Read More")))),
+                                const Spacer(),
+                                const Divider(),
+                                Row(
+                                  children: [
+                                    if (mod.urls?.containsKey(ModUrlType.DirectDownload.name) == true)
+                                      Padding(
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Tooltip(
+                                              message: mod.urls?[ModUrlType.DirectDownload.name],
+                                              child: CircleAvatar(
+                                                  foregroundColor: Colors.white,
+                                                  backgroundColor: Colors.black54,
+                                                  child: IconButton(
+                                                      onPressed: () {
+                                                        launchUrl(
+                                                            Uri.parse(mod.urls?[ModUrlType.DirectDownload.name] ?? ""),
+                                                            webOnlyWindowName: "_blank");
+                                                      },
+                                                      icon: const Icon(Icons.file_download))))),
+                                    if (mod.urls?.containsKey(ModUrlType.Discord.name) == true)
+                                      Padding(
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Tooltip(
+                                              message: mod.urls?[ModUrlType.Discord.name],
+                                              child: ElevatedButton(
                                                   onPressed: () {
-                                                    launchUrl(
-                                                        Uri.parse(mod.urls?[ModUrlType.DirectDownload.name] ?? ""),
+                                                    launchUrl(Uri.parse(mod.urls?[ModUrlType.Discord.name] ?? ""),
                                                         webOnlyWindowName: "_blank");
                                                   },
-                                                  icon: const Icon(Icons.file_download))))),
-                                if (mod.urls?.containsKey(ModUrlType.Discord.name) == true)
-                                  Padding(
+                                                  style: buttonStyle,
+                                                  child: const Icon(Icons.discord)))),
+                                    if (mod.urls?.containsKey(ModUrlType.DownloadPage.name) == true &&
+                                        mod.urls?[ModUrlType.Forum.name] != mod.urls?[ModUrlType.DownloadPage.name])
+                                      Padding(
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Tooltip(
+                                              message: mod.urls?[ModUrlType.DownloadPage.name],
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    launchUrl(Uri.parse(mod.urls?[ModUrlType.DownloadPage.name] ?? ""),
+                                                        webOnlyWindowName: "_blank");
+                                                  },
+                                                  style: buttonStyle,
+                                                  child: const Text("WEBSITE")))),
+                                    if (mod.urls?.containsKey(ModUrlType.Forum.name) == true)
+                                      Padding(
+                                          padding: const EdgeInsets.only(right: 10),
+                                          child: Tooltip(
+                                              message: mod.urls?[ModUrlType.Forum.name],
+                                              child: ElevatedButton(
+                                                  onPressed: () {
+                                                    launchUrl(Uri.parse(mod.urls?[ModUrlType.Forum.name] ?? ""),
+                                                        webOnlyWindowName: "_blank");
+                                                  },
+                                                  style: buttonStyle,
+                                                  child: const Text("FORUM")))),
+                                    const Spacer(),
+                                    Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: Tooltip(
-                                          message: mod.urls?[ModUrlType.Discord.name],
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.Discord.name] ?? ""),
-                                                    webOnlyWindowName: "_blank");
-                                              },
-                                              style: buttonStyle,
-                                              child: const Icon(Icons.discord)))),
-                                if (mod.urls?.containsKey(ModUrlType.DownloadPage.name) == true &&
-                                    mod.urls?[ModUrlType.Forum.name] != mod.urls?[ModUrlType.DownloadPage.name])
-                                  Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Tooltip(
-                                          message: mod.urls?[ModUrlType.DownloadPage.name],
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.DownloadPage.name] ?? ""),
-                                                    webOnlyWindowName: "_blank");
-                                              },
-                                              style: buttonStyle,
-                                              child: const Text("WEBSITE")))),
-                                if (mod.urls?.containsKey(ModUrlType.Forum.name) == true)
-                                  Padding(
-                                      padding: const EdgeInsets.only(right: 10),
-                                      child: Tooltip(
-                                          message: mod.urls?[ModUrlType.Forum.name],
-                                          child: ElevatedButton(
-                                              onPressed: () {
-                                                launchUrl(Uri.parse(mod.urls?[ModUrlType.Forum.name] ?? ""),
-                                                    webOnlyWindowName: "_blank");
-                                              },
-                                              style: buttonStyle,
-                                              child: const Text("FORUM")))),
+                                          message: "*Search tags*\n${mod.searchTags.join("\n")}",
+                                          child: const Opacity(opacity: 0.1, child: Icon(Icons.bug_report))),
+                                    )
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ))));
+                            ))));
               }),
     );
   }

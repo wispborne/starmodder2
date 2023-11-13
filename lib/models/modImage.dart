@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:starmodder2/models/modInfo.dart';
 
 part '../generated/models/modImage.freezed.dart';
 part '../generated/models/modImage.g.dart';

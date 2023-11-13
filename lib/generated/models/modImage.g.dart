@@ -6,7 +6,8 @@ part of '../../models/modImage.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ModImage _$$_ModImageFromJson(Map<String, dynamic> json) => _$_ModImage(
+_$ModImageImpl _$$ModImageImplFromJson(Map<String, dynamic> json) =>
+    _$ModImageImpl(
       id: json['id'] as String?,
       filename: json['filename'] as String?,
       content_type: json['content_type'] as String?,
@@ -15,7 +16,7 @@ _$_ModImage _$$_ModImageFromJson(Map<String, dynamic> json) => _$_ModImage(
       size: (json['size'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$$_ModImageToJson(_$_ModImage instance) =>
+Map<String, dynamic> _$$ModImageImplToJson(_$ModImageImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'filename': instance.filename,

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of '../../models/modRepo.dart';
 
@@ -72,20 +72,21 @@ class _$ModRepoCopyWithImpl<$Res, $Val extends ModRepo>
 }
 
 /// @nodoc
-abstract class _$$_ModRepoCopyWith<$Res> implements $ModRepoCopyWith<$Res> {
-  factory _$$_ModRepoCopyWith(
-          _$_ModRepo value, $Res Function(_$_ModRepo) then) =
-      __$$_ModRepoCopyWithImpl<$Res>;
+abstract class _$$ModRepoImplCopyWith<$Res> implements $ModRepoCopyWith<$Res> {
+  factory _$$ModRepoImplCopyWith(
+          _$ModRepoImpl value, $Res Function(_$ModRepoImpl) then) =
+      __$$ModRepoImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({List<ModInfo> items, double? totalCount, String? lastUpdated});
 }
 
 /// @nodoc
-class __$$_ModRepoCopyWithImpl<$Res>
-    extends _$ModRepoCopyWithImpl<$Res, _$_ModRepo>
-    implements _$$_ModRepoCopyWith<$Res> {
-  __$$_ModRepoCopyWithImpl(_$_ModRepo _value, $Res Function(_$_ModRepo) _then)
+class __$$ModRepoImplCopyWithImpl<$Res>
+    extends _$ModRepoCopyWithImpl<$Res, _$ModRepoImpl>
+    implements _$$ModRepoImplCopyWith<$Res> {
+  __$$ModRepoImplCopyWithImpl(
+      _$ModRepoImpl _value, $Res Function(_$ModRepoImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -95,7 +96,7 @@ class __$$_ModRepoCopyWithImpl<$Res>
     Object? totalCount = freezed,
     Object? lastUpdated = freezed,
   }) {
-    return _then(_$_ModRepo(
+    return _then(_$ModRepoImpl(
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -114,17 +115,18 @@ class __$$_ModRepoCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ModRepo implements _ModRepo {
-  _$_ModRepo(
+class _$ModRepoImpl implements _ModRepo {
+  _$ModRepoImpl(
       {required final List<ModInfo> items, this.totalCount, this.lastUpdated})
       : _items = items;
 
-  factory _$_ModRepo.fromJson(Map<String, dynamic> json) =>
-      _$$_ModRepoFromJson(json);
+  factory _$ModRepoImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ModRepoImplFromJson(json);
 
   final List<ModInfo> _items;
   @override
   List<ModInfo> get items {
+    if (_items is EqualUnmodifiableListView) return _items;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_items);
   }
@@ -143,7 +145,7 @@ class _$_ModRepo implements _ModRepo {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ModRepo &&
+            other is _$ModRepoImpl &&
             const DeepCollectionEquality().equals(other._items, _items) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
@@ -159,12 +161,12 @@ class _$_ModRepo implements _ModRepo {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ModRepoCopyWith<_$_ModRepo> get copyWith =>
-      __$$_ModRepoCopyWithImpl<_$_ModRepo>(this, _$identity);
+  _$$ModRepoImplCopyWith<_$ModRepoImpl> get copyWith =>
+      __$$ModRepoImplCopyWithImpl<_$ModRepoImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ModRepoToJson(
+    return _$$ModRepoImplToJson(
       this,
     );
   }
@@ -174,9 +176,9 @@ abstract class _ModRepo implements ModRepo {
   factory _ModRepo(
       {required final List<ModInfo> items,
       final double? totalCount,
-      final String? lastUpdated}) = _$_ModRepo;
+      final String? lastUpdated}) = _$ModRepoImpl;
 
-  factory _ModRepo.fromJson(Map<String, dynamic> json) = _$_ModRepo.fromJson;
+  factory _ModRepo.fromJson(Map<String, dynamic> json) = _$ModRepoImpl.fromJson;
 
   @override
   List<ModInfo> get items;
@@ -186,6 +188,6 @@ abstract class _ModRepo implements ModRepo {
   String? get lastUpdated;
   @override
   @JsonKey(ignore: true)
-  _$$_ModRepoCopyWith<_$_ModRepo> get copyWith =>
+  _$$ModRepoImplCopyWith<_$ModRepoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

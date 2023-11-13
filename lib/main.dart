@@ -18,7 +18,7 @@ import 'business.dart';
 import 'models/modRepo.dart';
 
 const appTitle = "Starmodder 2";
-const version = "2.2";
+const version = "2.3";
 const subtitle = "An unofficial Starsector mod database";
 
 void main() {
@@ -56,7 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(title: appTitle, query: state.pathParameters["q"]);
+          return MyHomePage(title: appTitle, query: state.uri.queryParameters["q"]);
         },
       )
     ],
@@ -91,7 +91,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-          toolbarHeight: 70,
+          toolbarHeight: 84,
           shadowColor: Colors.black,
           title: Row(
             children: [
@@ -140,7 +140,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 Padding(
                     padding: const EdgeInsets.only(top: 7),
                     child: Text(
-                      "Search using name, author, game version, category, or source (eg Discord)",
+                      "Search using name, author, game version, category, or source (eg Discord)."
+                      "\nSeparate terms using commas. Negate using dash e.g. \"discord, -forum\".",
                       style: theme.textTheme.labelMedium
                           ?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
                     ))
@@ -153,7 +154,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             ],
           )),
       body: Stack(children: [
-        Padding(padding: const EdgeInsets.only(left: 15, top: 10), child: GeneratedTimeText()),
+        const Row(
+          children: [
+            Padding(padding: EdgeInsets.only(left: 15, top: 10), child: GeneratedTimeText()),
+            Spacer(),
+            Padding(padding: EdgeInsets.only(left: 15, top: 10, right: 15), child: ModsVisibleText()),
+          ],
+        ),
         Center(
           child: Padding(
               padding: const EdgeInsets.all(10),
@@ -182,14 +189,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 void refresh(WidgetRef ref) {
   compute<List<String>, ModRepo?>(fetchAndParseModInfo, []).then((value) {
     Fimber.i("Updating state with ${value?.totalCount} new mods.");
-    return ref.read(appState.allMods.notifier).update((state) => value);
+    return ref.watch(appState.allMods.notifier)?.update((state) => value);
   });
 }
 
 class GeneratedTimeText extends ConsumerWidget {
   const GeneratedTimeText({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -198,6 +205,22 @@ class GeneratedTimeText extends ConsumerWidget {
     return Text(
       // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
       "generated ${DateFormat.MMMd().add_jm().format(lastUpdatedDate)} ${lastUpdatedDate.timeZoneName.acronym()}",
+      style: theme.textTheme.labelMedium?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
+    );
+  }
+}
+
+class ModsVisibleText extends ConsumerWidget {
+  const ModsVisibleText({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var modsVisible = ref.watch(appState.searchResultsProvider)?.length ?? 0;
+    final theme = Theme.of(context);
+    return Text(
+      "$modsVisible mods shown",
       style: theme.textTheme.labelMedium?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
     );
   }

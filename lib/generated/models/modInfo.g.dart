@@ -6,7 +6,8 @@ part of '../../models/modInfo.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ModInfo _$$_ModInfoFromJson(Map<String, dynamic> json) => _$_ModInfo(
+_$ModInfoImpl _$$ModInfoImplFromJson(Map<String, dynamic> json) =>
+    _$ModInfoImpl(
       name: json['name'] as String?,
       authorsList: (json['authorsList'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -28,7 +29,7 @@ _$_ModInfo _$$_ModInfoFromJson(Map<String, dynamic> json) => _$_ModInfo(
       description: json['description'] as String?,
     );
 
-Map<String, dynamic> _$$_ModInfoToJson(_$_ModInfo instance) =>
+Map<String, dynamic> _$$ModInfoImplToJson(_$ModInfoImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
       'authorsList': instance.authorsList,

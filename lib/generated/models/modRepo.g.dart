@@ -6,7 +6,8 @@ part of '../../models/modRepo.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ModRepo _$$_ModRepoFromJson(Map<String, dynamic> json) => _$_ModRepo(
+_$ModRepoImpl _$$ModRepoImplFromJson(Map<String, dynamic> json) =>
+    _$ModRepoImpl(
       items: (json['items'] as List<dynamic>)
           .map((e) => ModInfo.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -14,7 +15,7 @@ _$_ModRepo _$$_ModRepoFromJson(Map<String, dynamic> json) => _$_ModRepo(
       lastUpdated: json['lastUpdated'] as String?,
     );
 
-Map<String, dynamic> _$$_ModRepoToJson(_$_ModRepo instance) =>
+Map<String, dynamic> _$$ModRepoImplToJson(_$ModRepoImpl instance) =>
     <String, dynamic>{
       'items': instance.items,
       'totalCount': instance.totalCount,

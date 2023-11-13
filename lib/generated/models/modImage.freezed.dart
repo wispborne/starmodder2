@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of '../../models/modImage.dart';
 
@@ -97,10 +97,11 @@ class _$ModImageCopyWithImpl<$Res, $Val extends ModImage>
 }
 
 /// @nodoc
-abstract class _$$_ModImageCopyWith<$Res> implements $ModImageCopyWith<$Res> {
-  factory _$$_ModImageCopyWith(
-          _$_ModImage value, $Res Function(_$_ModImage) then) =
-      __$$_ModImageCopyWithImpl<$Res>;
+abstract class _$$ModImageImplCopyWith<$Res>
+    implements $ModImageCopyWith<$Res> {
+  factory _$$ModImageImplCopyWith(
+          _$ModImageImpl value, $Res Function(_$ModImageImpl) then) =
+      __$$ModImageImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -113,11 +114,11 @@ abstract class _$$_ModImageCopyWith<$Res> implements $ModImageCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ModImageCopyWithImpl<$Res>
-    extends _$ModImageCopyWithImpl<$Res, _$_ModImage>
-    implements _$$_ModImageCopyWith<$Res> {
-  __$$_ModImageCopyWithImpl(
-      _$_ModImage _value, $Res Function(_$_ModImage) _then)
+class __$$ModImageImplCopyWithImpl<$Res>
+    extends _$ModImageCopyWithImpl<$Res, _$ModImageImpl>
+    implements _$$ModImageImplCopyWith<$Res> {
+  __$$ModImageImplCopyWithImpl(
+      _$ModImageImpl _value, $Res Function(_$ModImageImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -130,7 +131,7 @@ class __$$_ModImageCopyWithImpl<$Res>
     Object? url = freezed,
     Object? size = freezed,
   }) {
-    return _then(_$_ModImage(
+    return _then(_$ModImageImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -161,8 +162,8 @@ class __$$_ModImageCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ModImage implements _ModImage {
-  _$_ModImage(
+class _$ModImageImpl implements _ModImage {
+  _$ModImageImpl(
       {this.id,
       this.filename,
       this.content_type,
@@ -170,8 +171,8 @@ class _$_ModImage implements _ModImage {
       this.url,
       this.size});
 
-  factory _$_ModImage.fromJson(Map<String, dynamic> json) =>
-      _$$_ModImageFromJson(json);
+  factory _$ModImageImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ModImageImplFromJson(json);
 
   @override
   final String? id;
@@ -195,7 +196,7 @@ class _$_ModImage implements _ModImage {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ModImage &&
+            other is _$ModImageImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.filename, filename) ||
                 other.filename == filename) &&
@@ -215,12 +216,12 @@ class _$_ModImage implements _ModImage {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ModImageCopyWith<_$_ModImage> get copyWith =>
-      __$$_ModImageCopyWithImpl<_$_ModImage>(this, _$identity);
+  _$$ModImageImplCopyWith<_$ModImageImpl> get copyWith =>
+      __$$ModImageImplCopyWithImpl<_$ModImageImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ModImageToJson(
+    return _$$ModImageImplToJson(
       this,
     );
   }
@@ -233,9 +234,10 @@ abstract class _ModImage implements ModImage {
       final String? content_type,
       final String? proxy_url,
       final String? url,
-      final double? size}) = _$_ModImage;
+      final double? size}) = _$ModImageImpl;
 
-  factory _ModImage.fromJson(Map<String, dynamic> json) = _$_ModImage.fromJson;
+  factory _ModImage.fromJson(Map<String, dynamic> json) =
+      _$ModImageImpl.fromJson;
 
   @override
   String? get id;
@@ -251,6 +253,6 @@ abstract class _ModImage implements ModImage {
   double? get size;
   @override
   @JsonKey(ignore: true)
-  _$$_ModImageCopyWith<_$_ModImage> get copyWith =>
+  _$$ModImageImplCopyWith<_$ModImageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
