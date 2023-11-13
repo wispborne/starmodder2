@@ -29070,14 +29070,14 @@ Tm:function Tm(a){this.a=a},
 aoD:function aoD(a){this.a=a},
 aoC:function aoC(){},
 b3I(a){var s=null,r=A.Q(a),q=t.p
-A.b3H(A.cw("Starmodder 2","2","2.3"),"An unofficial Starsector mod database by Wisp",A.a([new A.dV(B.Bc,A.eG(A.a([B.fs,A.Sw(A.cK(A.a([B.Qz,A.cK(s,s,s,s,r.p3.Q,"so it'll probably get discontinued next year.")],t.VO),s,s,s,s,s),s,s,s,s,s,s,s,s,s,s,s,s),A.aIr(B.nN,new A.aB9(),"Source Code: https://github.com/wispborne/starmodder2"),A.aIr(B.nN,new A.aBa(),"Raw data: https://github.com/wispborne/StarsectorModRepo")],q),B.a0,B.R,B.a9),s)],q),a)},
+A.b3H(A.cw("Starmodder 2.3","2","2.3"),"An unofficial Starsector mod database by Wisp",A.a([new A.dV(B.Bc,A.eG(A.a([B.fs,A.Sw(A.cK(A.a([B.Qz,A.cK(s,s,s,s,r.p3.Q,"so it'll probably get discontinued next year.")],t.VO),s,s,s,s,s),s,s,s,s,s,s,s,s,s,s,s,s),A.aIr(B.nN,new A.aB9(),"Source Code: https://github.com/wispborne/starmodder2"),A.aIr(B.nN,new A.aBa(),"Raw data: https://github.com/wispborne/StarsectorModRepo")],q),B.a0,B.R,B.a9),s)],q),a)},
 aB9:function aB9(){},
 aBa:function aBa(){},
 b3a(){var s,r,q,p,o,n
 if($.a4==null)A.aDU()
 $.a4.toString
 A.aNq(!0)
-A.aFc("Starmodder 2")
+A.aFc("Starmodder 2.3")
 if($.a4==null)A.aDU()
 s=$.a4
 s.toString
@@ -96358,10 +96358,10 @@ aC(){this.aQ()
 $.aFp()
 A.b3u(this.grL())}}
 A.aul.prototype={
-$2(a,b){return new A.ok(this.a.w,"Starmodder 2",a,b,!1,null)},
+$2(a,b){return new A.ok(this.a.w,"Starmodder 2.3",a,b,!1,null)},
 $S:626}
 A.auk.prototype={
-$2(a,b){return new A.r3("Starmodder 2",b.b.gCJ().i(0,"q"),null)},
+$2(a,b){return new A.r3("Starmodder 2.3",b.b.gCJ().i(0,"q"),null)},
 $S:627}
 A.r3.prototype={
 ab(){return new A.XZ(B.i)}}
