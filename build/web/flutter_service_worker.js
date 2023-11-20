@@ -6,7 +6,7 @@ const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {"assets/AssetManifest.bin": "0b0a3415aad49b6e9bf965ff578614f9",
 "assets/AssetManifest.json": "99914b932bd37a50b983c5e7c90ae93b",
 "assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
-"assets/fonts/MaterialIcons-Regular.otf": "e5a9138af4865c522ff942034b748ef8",
+"assets/fonts/MaterialIcons-Regular.otf": "1040d81b36b281f8af9e7f30ee6f4874",
 "assets/NOTICES": "bc5041344a9991b9dd21551d7be6b446",
 "assets/shaders/ink_sparkle.frag": "f8b80e740d33eb157090be4e995febdf",
 "canvaskit/canvaskit.js": "dd5b7e38ac853fcf41faa69cf49aa175",
@@ -24,9 +24,9 @@ const RESOURCES = {"assets/AssetManifest.bin": "0b0a3415aad49b6e9bf965ff578614f9
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "e71ec530272123b4a97a64a61c0c9c65",
-"/": "e71ec530272123b4a97a64a61c0c9c65",
-"main.dart.js": "2cc73a49467ae6cd5aaa62282edcbea9",
+"index.html": "3b51b02fd551cdcf408edd0bd2ea0456",
+"/": "3b51b02fd551cdcf408edd0bd2ea0456",
+"main.dart.js": "56fd03cfa1e9f5b326f792ef39a52929",
 "manifest.json": "bf269b39a992423212dcd1f5a7af1c19",
 "version.json": "e032fe63b606204c0407c69c43f54fa0"};
 // The application shell files that are downloaded before a service worker can

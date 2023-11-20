@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
-import 'package:starmodder2/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'main.dart';

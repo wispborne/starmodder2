@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:starmodder2/logging.dart';
 import 'package:starmodder2/modList.dart';
-import 'package:starmodder2/state.dart' as appState;
+import 'package:starmodder2/state.dart' as app_state;
 import 'package:starmodder2/themes.dart';
 import 'package:starmodder2/utils.dart';
 import 'package:window_size/window_size.dart';
@@ -17,7 +17,7 @@ import 'aboutScreen.dart';
 import 'business.dart';
 import 'models/modRepo.dart';
 
-const version = "2.3";
+const version = "2.4";
 const appTitle = "Starmodder $version";
 const subtitle = "An unofficial Starsector mod database";
 
@@ -56,7 +56,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(title: appTitle, query: state.uri.queryParameters["q"]);
+          return MyHomePage(title: appTitle, query: state.uri.queryParameters["q"] ?? Uri.base.queryParameters["q"] ?? "");
         },
       )
     ],
@@ -84,10 +84,11 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final controller = TextEditingController();
+    final controller = TextEditingController(text: widget.query ?? "");
 
     return Scaffold(
       appBar: AppBar(
@@ -120,15 +121,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         TextField(
                             autofocus: true,
                             controller: controller,
-                            onChanged: (text) => ref.read(appState.search.notifier).update((state) => text),
+                            onChanged: (text) => ref.read(app_state.search.notifier).update((state) => text),
                             decoration: InputDecoration(
                                 hintText: "Search",
-                                // icon: const Icon(Icons.search),
                                 prefixIcon: const Icon(Icons.search),
                                 suffix: InkWell(
                                     onTap: () {
                                       controller.clear();
-                                      ref.read(appState.search.notifier).update((state) => null);
+                                      ref.read(app_state.search.notifier).update((state) => null);
                                     },
                                     child: const SizedBox(
                                         height: 16,
@@ -182,14 +182,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   void initState() {
     super.initState();
 
-    ref.read(appState.search.notifier).update((s) => widget.query);
+    ref.read(app_state.search.notifier).update((s) => widget.query);
   }
 }
 
 void refresh(WidgetRef ref) {
   compute<List<String>, ModRepo?>(fetchAndParseModInfo, []).then((value) {
     Fimber.i("Updating state with ${value?.totalCount} new mods.");
-    return ref.watch(appState.allMods.notifier)?.update((state) => value);
+    return ref.watch(app_state.allMods.notifier).update((state) => value);
   });
 }
 
@@ -200,7 +200,7 @@ class GeneratedTimeText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var lastUpdatedDate = DateTime.parse(ref.watch(appState.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z");
+    var lastUpdatedDate = DateTime.parse(ref.watch(app_state.allMods)?.lastUpdated ?? "1984-06-08T00:00:00Z");
     final theme = Theme.of(context);
     return Text(
       // DateTime.parse(ref.read(appState.allMods)?.lastUpdated ?? "0").isUtc.toString(),
@@ -217,7 +217,7 @@ class ModsVisibleText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var modsVisible = ref.watch(appState.searchResultsProvider)?.length ?? 0;
+    var modsVisible = ref.watch(app_state.searchResultsProvider)?.length ?? 0;
     final theme = Theme.of(context);
     return Text(
       "$modsVisible mods shown",
