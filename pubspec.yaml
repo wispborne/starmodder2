@@ -33,7 +33,7 @@ dependencies:
     sdk: flutter
 
   json_annotation: ^4.8.1
-  flutter_riverpod: ^2.4.6
+  flutter_riverpod: ^2.4.8
   freezed_annotation: ^2.4.1
   fimber: ^0.7.0
   dart_extensions_methods: ^2.0.0
@@ -58,7 +58,7 @@ dependencies:
   zoomable_photo_gallery: ^1.0.2+1
   flutter_linkify: ^6.0.0
   collection: ^1.18.0
-  riverpod_annotation: ^2.3.1
+  riverpod_annotation: ^2.3.2
   platform_info: ^4.0.2
 
 dev_dependencies:
@@ -74,9 +74,9 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^3.0.1
-  riverpod_generator: ^2.3.6
-  custom_lint: ^0.5.6
-  riverpod_lint: ^2.3.4
+  riverpod_generator: ^2.3.8
+  custom_lint: ^0.5.7
+  riverpod_lint: ^2.3.6
 
 # flutter pub run flutter_launcher_icons:main
 flutter_icons:

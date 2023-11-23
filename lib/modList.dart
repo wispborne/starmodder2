@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dart_extensions_methods/dart_extension_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -301,7 +302,8 @@ class _ModListState extends ConsumerState<ModList> {
                                     Padding(
                                       padding: const EdgeInsets.only(right: 10),
                                       child: Tooltip(
-                                          message: "*Search tags*\n${mod.searchTags.join("\n")}",
+                                          message:
+                                              "*Search tags & score penalty*\n${mod.searchTags.sortedBy<num>((e) => e.scorePenalty).map((e) => "${e.term} (-${e.scorePenalty})").join("\n")}",
                                           child: const Opacity(opacity: 0.1, child: Icon(Icons.bug_report))),
                                     )
                                   ],
@@ -329,6 +331,18 @@ class ModImage extends StatelessWidget {
     const imageHeight = 100.0;
     final theme = Theme.of(context);
 
+    var noImageWidget = Container(
+      decoration: BoxDecoration(
+          color: Colors.black26.withAlpha(30), borderRadius: const BorderRadius.all(Radius.circular(3))),
+      height: imageHeight,
+      child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Opacity(
+          opacity: 0.3,
+          child: Icon(Icons.no_photography),
+        )
+      ]),
+    );
+
     if (mod.images?.values.isNotEmpty == true) {
       return GestureDetector(
           onTap: () {
@@ -338,13 +352,15 @@ class ModImage extends StatelessWidget {
           child: Stack(children: [
             Center(
                 child: FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: mod.images?.values.first.url ?? "",
-              width: imageWidth,
-              height: imageHeight,
-              fit: BoxFit.fitWidth,
-              fadeInDuration: const Duration(milliseconds: 100),
-            )),
+                    placeholder: kTransparentImage,
+                    image: mod.images?.values.first.url ?? "",
+                    width: imageWidth,
+                    height: imageHeight,
+                    fit: BoxFit.fitWidth,
+                    fadeInDuration: const Duration(milliseconds: 100),
+                    imageErrorBuilder: (context, error, stackTrace) {
+                      return noImageWidget;
+                    })),
             HoverAnimatedContainer(
               color: Colors.black26.withAlpha(30),
               cursor: SystemMouseCursors.click,
@@ -353,17 +369,7 @@ class ModImage extends StatelessWidget {
             )
           ]));
     } else {
-      return Container(
-        decoration: BoxDecoration(
-            color: Colors.black26.withAlpha(30), borderRadius: const BorderRadius.all(Radius.circular(3))),
-        height: imageHeight,
-        child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Opacity(
-            opacity: 0.3,
-            child: Icon(Icons.no_photography),
-          )
-        ]),
-      );
+      return noImageWidget;
     }
   }
 }

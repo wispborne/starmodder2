@@ -17,7 +17,7 @@ import 'aboutScreen.dart';
 import 'business.dart';
 import 'models/modRepo.dart';
 
-const version = "2.4";
+const version = "2.5";
 const appTitle = "Starmodder $version";
 const subtitle = "An unofficial Starsector mod database";
 
@@ -56,7 +56,8 @@ class _MyAppState extends ConsumerState<MyApp> {
       GoRoute(
         path: '/',
         builder: (BuildContext context, GoRouterState state) {
-          return MyHomePage(title: appTitle, query: state.uri.queryParameters["q"] ?? Uri.base.queryParameters["q"] ?? "");
+          return MyHomePage(
+              title: appTitle, query: state.uri.queryParameters["q"] ?? Uri.base.queryParameters["q"] ?? "");
         },
       )
     ],
@@ -84,7 +85,6 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -141,7 +141,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     padding: const EdgeInsets.only(top: 7),
                     child: Text(
                       "Search using name, author, game version, category, or source (eg Discord)."
-                      "\nSeparate terms using commas. Negate using dash e.g. \"discord, -forum\".",
+                      "\nSeparate terms using commas. Negate using dash e.g. \"discord, -forum\". Use quotes for exact match.",
                       style: theme.textTheme.labelMedium
                           ?.copyWith(color: theme.textTheme.labelMedium?.color?.withOpacity(0.7)),
                     ))
@@ -182,7 +182,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   void initState() {
     super.initState();
 
-    ref.read(app_state.search.notifier).update((s) => widget.query);
+    Future.delayed(const Duration(seconds: 1), () {
+      if (widget.query != null && widget.query!.isNotEmpty) {
+        ref.read(app_state.search.notifier).update((s) => widget.query);
+      }
+    });
   }
 }
 

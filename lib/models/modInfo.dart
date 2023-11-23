@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:text_search/text_search.dart';
 
 import '../search.dart';
 import 'modImage.dart';
@@ -26,5 +27,5 @@ class ModInfo with _$ModInfo {
   /// Private constructor required for freezed to allow adding custom methods and properties.
   ModInfo._();
 
-  late final List<String> searchTags = createSearchTags(this);
+  late final List<TextSearchItemTerm> searchTags = createSearchTags(this);
 }
