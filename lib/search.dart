@@ -15,8 +15,10 @@ List<TextSearchItemTerm> createSearchTags(ModInfo modInfo) {
   final alphaName = modInfo.name?.slugify();
   final tags = [
     modInfo.name?.let((it) => (term: it, penalty: 0.0)),
-    alphaName?.let((it) => (term: it, penalty: 10.0)),
-    ...?alphaName?.split("-").map((it) => (term: it, penalty: 10.0)),
+    // Slugified name (e.g. "Star Wars" -> "star-wars")
+    alphaName?.let((it) => (term: it, penalty: 5.0)),
+    // Split name apart (e.g. "Star Wars" -> "Star", "Wars")
+    ...?alphaName?.split("-").filter((it) => it.length > 2).map((it) => (term: it, penalty: 5.0)),
     // Create acryonym.
     ((alphaName?.split("-").length ?? 0) > 0)
         ? alphaName!
@@ -24,7 +26,8 @@ List<TextSearchItemTerm> createSearchTags(ModInfo modInfo) {
             .where((element) => element.isNotEmpty)
             .map((e) => e.substring(0, 1))
             .join()
-            .let((it) => (term: it, penalty: 0.0))
+            .let((self) => (self.length < 2) ? null : self) // Don't create short acronyms.
+            ?.let((it) => (term: it, penalty: 0.0))
         : null,
     ...?modInfo.authorsList?.map((it) => (term: it, penalty: 0.0)),
     ...?modInfo.categories?.map((it) => (term: it, penalty: 0.0)),

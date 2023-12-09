@@ -17,7 +17,7 @@ import 'aboutScreen.dart';
 import 'business.dart';
 import 'models/modRepo.dart';
 
-const version = "2.5";
+const version = "2.5.1";
 const appTitle = "Starmodder $version";
 const subtitle = "An unofficial Starsector mod database";
 
